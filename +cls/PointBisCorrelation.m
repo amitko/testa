@@ -1,6 +1,6 @@
-function res=clsPointBisCorrelation(item_response)
+function res=PointBisCorrelation(item_response)
 % Function
-% res=clsPointBisCorrelation(item_response)
+% res=cls.PointBisCorrelation(item_response)
 % calculates the point biserial correlation
 % for a given set of items
 %
@@ -23,7 +23,7 @@ score = sum(item_response')';
 m = mean(score);
 v = sqrt(var(score));
 
-p = clsItemDifficulty( item_response );
+p = cls.ItemDifficulty( item_response );
 
 res = [];
 for k = 1:size(item_response,2)

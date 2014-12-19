@@ -1,6 +1,6 @@
-function res=clsPhi(item_response)
+function res=Phi(item_response)
 % Function
-% res=clsPhi(item_response)
+% res=cls.Phi(item_response)
 % calculates the phi coefficient for a given set of items
 %
 % Input:
@@ -10,11 +10,12 @@ function res=clsPhi(item_response)
 % Output: 
 %   res - Matrix MxM phi coefficients
 
-% Dimitar Atanasov, 2009
-% datanasov@nbu.bg
+% Dimitar Atanasov, 2014
+% datanasov@ir-statistics.net
 
-s = clsItemVariance( item_response );
-sc = clsItemCovariance( item_response );
+
+s = cls.ItemVariance( item_response );
+sc = cls.ItemCovariance( item_response );
 
 res=[];
 for k = 1:size(s,2)

@@ -1,5 +1,5 @@
-function res=irtAbilityGroups(scores, n)
-% res=irtAbilityGroups(scores,n)
+function res=AbilityGroups(scores, n)
+% Function res = irt.AbilityGroups(scores,n)
 %   Returns column of ability groups for the examenee with scores
 %
 %   INPUT: 

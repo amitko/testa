@@ -1,6 +1,6 @@
-function res=clsItemDifficulty(item_response)
+function res=ItemDifficulty(item_response)
 % Function
-% res=clsItemDifficulty(item_response)
+% res=cls.ItemDifficulty(item_response)
 % calculates the probability of the correct item performance
 % intrepreted as difficulty in classical test theory.
 %

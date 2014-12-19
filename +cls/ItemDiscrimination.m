@@ -1,6 +1,6 @@
-function res=clsItemDiscrimination(item_response)
+function res=ItemDiscrimination(item_response)
 % Function
-% res=clsItemDiscrimination(item_response)
+% res=cls.ItemDiscrimination(item_response)
 % calculates the discrimination index for a given set of items
 %
 % Input:

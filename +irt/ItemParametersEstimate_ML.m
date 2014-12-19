@@ -1,5 +1,5 @@
-function [pars,se]=irtItemParametersEstimate_ML( response, theta, o)
-% Function irt_estimate( response, theta,  o)
+function [pars,se]=ItemParametersEstimate_ML( response, theta, o)
+% Function irt.ItemParametersEstimate_ML( response, theta,  o)
 %   Returns the estimated parameters of the IRT model
 %       for a set of items.
 %
@@ -7,7 +7,7 @@ function [pars,se]=irtItemParametersEstimate_ML( response, theta, o)
 %       response - observed examinee response
 %                   ( 1 - correct, 0 - incorrect)
 %       theta    - Latent trait values
-%       o        - irtOptions
+%       o        - irt.Options
 %
 %   OUTPUT:
 %       par - the values of the estimated parameters
@@ -64,7 +64,7 @@ function [par,se]=irt_item_estimate(th, item, theta, o )
 
 function res=item_lklh(a,item_response,score,d)
 
-    LP = @(a,s,d)irtLogisticProbability(a,s,d);
+    LP = @(a,s,d)irt.LogisticProbability(a,s,d);
     res = 0;
     for k=1:size(item_response,1)
         p = LP(a,score(k),d);

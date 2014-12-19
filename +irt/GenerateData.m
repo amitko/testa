@@ -1,5 +1,5 @@
-function res=irtGenerateData(pars,th,d,varargin)
-% Function res=GenerateData(pars,th,d...)
+function res=GenerateData(pars,th,d,varargin)
+% Function res=irt.GenerateData(pars,th,d...)
 %
 % Simulate dichotomous item response from
 % a given set of IRT item parameters and
@@ -40,7 +40,7 @@ for ability = th
     end;
 
     for p = 1:size(pars,1);
-        pr = irtLogisticProbability( pars(p,:), ability, d);
+        pr = irt.LogisticProbability( pars(p,:), ability, d);
 
         if size(varargin,2) >= 2
             if strcmp(varargin{1},'guess') == 1 && attr(p) == 1

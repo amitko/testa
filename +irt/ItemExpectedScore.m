@@ -1,5 +1,5 @@
-function res = irtItemExpectedScore(a,type)
-% Function irt_item_score_expected(a)
+function res = ItemExpectedScore(a,type)
+% Function irt.ItemExpectedScore(a,type)
 %
 %   INPUT:
 %       a    - parameters of the model

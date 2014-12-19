@@ -1,5 +1,5 @@
-function res= clsKR20(item_data,score)
-% res= clsKR20(item_data,score)
+function res= KR20(item_data,score)
+% res= cls.KR20(item_data,score)
 % 
 %   Returns Kuder-Richardson coefficient of the
 %   reliability of the test for the dichotomous

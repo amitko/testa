@@ -1,6 +1,6 @@
-function res=clsCrAlpha(item_response)
+function res=CrAlpha(item_response)
 % Function
-% res=clsCrAlpha(item_response)
+% res=cls.CrAlpha(item_response)
 % calculates the Cronbach's alpha coefficient
 % for a given set of items
 %
@@ -14,7 +14,7 @@ function res=clsCrAlpha(item_response)
 % Dimitar Atanasov, 2014
 % datanasov@ir-statistics.net
 
-s = clsItemVariance( item_response );
+s = cls.ItemVariance( item_response );
 k = size(item_response,2);
 v = var(sum(item_response'));
 

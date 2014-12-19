@@ -1,5 +1,5 @@
-function res=irtLogisticProbability(a,th,d)
-% Function irtLogisticProbability(a,th)
+function res=LogisticProbability(a,th,d)
+% Function irt.LogisticProbability(a,th)
 %   returns the probability for IRT logistic model
 %
 %   INPUT:

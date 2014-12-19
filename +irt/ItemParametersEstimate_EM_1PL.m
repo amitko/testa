@@ -1,12 +1,11 @@
-function [pars,ability]=irtItemParametersEstimate_EM( data,m,th_interval, params_0 )
-%  Function [pars,ability]=irt_em_estimate( data,K,th)
+function [pars,ability]=ItemParametersEstimate_EM_1PL( data,o )
+%  Function [pars,ability] = irt.ItemParametersEstimate_EM_1PL( data, o)
 %      estimates the parameters of the item characreristic
 %      curves under the IRT model usen the EM algorith.
 %
 %  Input:
 %      data - Dihotomous item response
-%      m    - Number of different latent clases
-%      th   - [th_min th_max] values of the latent variable
+%      o    - irt.Options
 %
 %  Output:
 %      pars - Item parapeters
@@ -15,28 +14,34 @@ function [pars,ability]=irtItemParametersEstimate_EM( data,m,th_interval, params
 % Dimitar Atanasov - 2014
 % datanasov@ir-statistics.net
 
-[N,J] = size(data);
-
-if nargin < 4
-    params_0 = [0, 1, 0.1];
+if nargin < 2
+    o = irt.Options;
 end;
 
-p = hist(irtAbilityGroups(sum(data')', m), m)./N;
+
+params_0 = o.StartingPoint_1PL;
+m = o.NofLatentsCategories;
+th_interval = o.LatentTraitInterval;
+
+[N,J] = size(data);
+
+p = hist(irt.AbilityGroups(sum(data')', m), m)./N;
 th = th_interval(1):(th_interval(2) - th_interval(1))/(m-1):th_interval(2);
 
 
-fT_new = 1;
+fT_new = 2;
 fT_old = 0;
-
 
 d = ones(J,1) * params_0;
 
 iter = 1;
-while abs(fT_new - fT_old) > 0.01 & iter < 100
+while abs(fT_new - fT_old) > o.MaxFunTol && iter < o.NofIterations_EM
  
    fT_old = fT_new;
-
+   
  disp(['Begining of iteration ' num2str(iter) '. Function value ' num2str(fT_new)]);
+ disp ('Parameters current value');
+ disp(d(1:end-2,:));
  disp('Calculating E step');
  
     %  %%%%%%%%%%%  E step %%%%%%%%%%%%%%%
@@ -82,21 +87,11 @@ while abs(fT_new - fT_old) > 0.01 & iter < 100
 disp('Calculating M step');
 
     p = ni./N;
-    
-    Bmin = [];
-    Bmax = [];
 
-    for j = 1:J
-        dd = d(j,:);
-        f = @(dd)log_lklh(dd,r,ni,th,j,m);
-        o = optimset('Display','iter');
-        [dt,f_new] = fmincon(f, [0 1 0.1] , [], [], [], [], ones(J,1) * [th_interval(1) 0 0], ones(J,1) * [th_interval(2) 3 0.5], [],o)
-        d(j,:) = dt;
-        fT_new = fT_new + f_new;
-    end;    
-    
-    d
-    
+    f = @(d)log_lklh(d,r,ni,th,J,m);
+    [dt,f_new] = fmincon(f, d , [], [], [], [], ones(J,1) * [th_interval(1)], ones(J,1) * [th_interval(2)], [],o.OptimisationOptions);
+    d = dt;
+    fT_new = f_new;    
     % = fminsearch(f,d);
 
 iter = iter+1;
@@ -109,17 +104,20 @@ ability = p;
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 function res=log_prob(th,params)
-%res = ( exp(  th - d  ) ) ./ (1 + exp( th - d ));
-res = irtLogisticProbability(params,th);
+res = 1 ./ (1 + exp(params - th));
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-function res = log_lklh(d,r,ni,th,j,m)
+function res = log_lklh(d,r,ni,th,J,m)
 
 l_j = [];
-for k=1:m
-      l_j(k) = r(j,k)*log( log_prob(th(k),d) ) + (ni(k) - r(j,k))*log( 1 - log_prob(th(k),d) );
-end;
+    for j = 1:J
+        dd = d(j);
+        l_j(j) = 0;
+        for k=1:m
+              l_j(j) = l_j(j) + r(j,k)*log( log_prob(th(k),dd) ) + (ni(k) - r(j,k))*log( 1 - log_prob(th(k),dd) );
+        end;
 
+    end;
 res = -sum(l_j');
 
 

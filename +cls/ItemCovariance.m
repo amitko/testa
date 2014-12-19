@@ -1,6 +1,6 @@
-function res=clsItemCovariance(item_response)
+function res=ItemCovariance(item_response)
 % Function
-% res=clsItemCovariance(item_response)
+% res=cls.ItemCovariance(item_response)
 % calculates the covariance between the items
 %
 % Input:
@@ -13,7 +13,7 @@ function res=clsItemCovariance(item_response)
 % Dimitar Atanasov, 2014
 % datanasov@ir-statistics.net
 
-p = clsItemDifficulty( item_response );
+p = cls.ItemDifficulty( item_response );
 res=[];
 
 for k=1:size(p,2)

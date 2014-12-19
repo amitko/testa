@@ -1,12 +1,11 @@
-function [pars,ability]=irtItemParametersEstimate_EM_1PL( data, o )
-%  Function [pars,ability]=irt_em_estimate( data,K,th)
+function [pars,ability]=ItemParametersEstimate_EM_1PL( data, o)
+%  Function [pars,ability] = irt.ItemParametersEstimate_EM_1PL( data,o)
 %      estimates the parameters of the item characreristic
 %      curves under the IRT model usen the EM algorith.
 %
 %  Input:
 %      data - Dihotomous item response
-%      o    - irtOptions
-%
+%      o    - irt.Options (optional) 
 %  Output:
 %      pars - Item parapeters
 %      ability - proportions for different latent groups
@@ -15,7 +14,7 @@ function [pars,ability]=irtItemParametersEstimate_EM_1PL( data, o )
 % datanasov@ir-statistics.net
 
 if nargin < 2
-    o = irtOptions;
+    o = irt.Options;
 end;
 
 [N,J] = size(data);
@@ -24,7 +23,7 @@ params_0 = o.StartingPoint_3PL;
 m = o.NofLatentsCategories;
 th_interval = o.LatentTraitInterval;
 
-p = hist(irtAbilityGroups(sum(data')', m), m)./N;
+p = hist(irt.AbilityGroups(sum(data')', m), m)./N;
 th = th_interval(1):(th_interval(2) - th_interval(1))/(m-1):th_interval(2);
 
 
@@ -89,7 +88,7 @@ disp('Calculating M step');
     p = ni./N;
 
     f = @(d)log_lklh(d,r,ni,th,J,m);
-    [dt,f_new] = fmincon(f, d , [], [], [], [], ones(J,1) * [th_interval(1) o.DiscriminationInterval(1)], ones(J,1) * [th_interval(2) o.DiscriminationInterval(2)], [],o.OptimisationOptions);
+    [dt,f_new] = fmincon(f, d , [], [], [], [], ones(J,1) * [th_interval(1) o.DicsriminationInterval(1) o.GuessingInterval(1)], ones(J,1) * [th_interval(2) o.DicsriminationInterval(2) o.GuessingInterval(2)], [],o.OptimisationOptions);
     d = dt;
     fT_new = f_new;    
     % = fminsearch(f,d);
@@ -104,7 +103,7 @@ ability = p;
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 function res=log_prob(th,params)
-res = 1 ./ (1 + exp( params(2)*1.702*(params(1) - th )));
+res = params(3) + ((1-params(3)) ./ (1 + exp( params(2)*1.702*(params(1) - th ))));
 %res = 1 ./ (1 + exp( params - th ));
 %res = irtLogisticProbability(params,th);
 

@@ -1,6 +1,6 @@
-function res=clsItemVariance(item_response)
+function res=ItemVariance(item_response)
 % Function
-% res=clsItemVariance(item_response)
+% res=cls.ItemVariance(item_response)
 % calculates the pilulation variance of the item score
 %
 % Input:
@@ -13,5 +13,5 @@ function res=clsItemVariance(item_response)
 % Dimitar Atanasov, 2014
 % datanasov@ir-statistics.net
 
-p = clsItemDifficulty( item_response );
+p = cls.ItemDifficulty( item_response );
 res = p .* ( 1 - p ); 
