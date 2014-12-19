@@ -35,7 +35,7 @@ fT_old = 0;
 d = ones(J,1) * params_0;
 
 iter = 1;
-while abs(fT_new - fT_old) > 1 && iter < o.NofIterations_EM
+while abs(fT_new - fT_old) > o.MaxFunTol && iter < o.NofIterations_EM
  
    fT_old = fT_new;
 
