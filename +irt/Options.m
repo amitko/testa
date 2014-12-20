@@ -4,6 +4,7 @@ function option = Options(varargin)
 option.NofLatentsCategories = 30;
 
 option.LatentTraitInterval  = [-7 7];
+option.LatentTraitPoints    = 100; 
 option.DicsriminationInterval = [0 3];
 option.GuessingInterval = [0 0.3];
 
@@ -22,6 +23,10 @@ option.LSDMShowMad          = 'Yes';
 option.LSDMReachedLevel     = 0.5;
 option.LSDMLevels           = 'No';
 
+option.Plot.legend          = 0;
+option.Plot.colour          = 0;
+
+
 if nargin > 0
 	if mod(nargin,2) ~= 0
 	 error('Wrong number og input arguments');
@@ -31,4 +36,7 @@ if nargin > 0
 		option = setfield(option,varargin{k},varargin{k+1});
 	end;
 end;
+
+options.LatentTraitValues   = linspace(option.LatentTraitInterval(1),option.LatentTraitInterval(2),option.LatentTraitPoints);
+
 

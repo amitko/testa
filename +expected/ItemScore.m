@@ -1,5 +1,5 @@
-function res = ItemExpectedScore(a,type)
-% Function irt.ItemExpectedScore(a,type)
+function res = ItemScore(a,type)
+% Function res = expected.ItemScore(a,type)
 %
 %   INPUT:
 %       a    - parameters of the model
@@ -9,11 +9,17 @@ function res = ItemExpectedScore(a,type)
 %   OUTPUT:
 %	the expected item score
 
-% Dimitar Atanasov (2008)
-% datanasov@nbu.bg
+% Dimitar Atanasov 2014
+% datanasov@ir-statistics.net
+
 
 if nargin < 2
     type = 'erf';
+end;
+
+if size(a,2) > 1 && isempty( find( a(:,2) ) )
+    a = a(1);
+    a = [a 1];
 end;
 
 if size(a,2) == 1
