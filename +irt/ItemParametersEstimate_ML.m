@@ -24,7 +24,7 @@ function [pars,se]=ItemParametersEstimate_ML( response, theta, o)
     end;
 
     if nargin < 3
-        o = irtOptions;
+        o = irt.Options;
     end;
 
    
