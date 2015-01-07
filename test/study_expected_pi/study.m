@@ -59,7 +59,7 @@ for p_ = pars'
     Expected(end+1) = expected.ItemScore(p_');
 end;
 
-%%
+%% Generating and estimating (1)
 for N_ = N
     
     ability = random('norm',0,3,N_,1);
@@ -79,12 +79,34 @@ for N_ = N
 
 end;
 
-%% present the results
+%% present the results (2)
 for k = 1:size(N,2)
     disp(['Observations ' num2str(N(k))]);
     tab = table(pars,Expected', Observed(:,k),EPi3(:,k),PL3{k},'VariableNames',{'Params', 'ExpProb', 'ObsProb', 'EstProb3', 'IRT_3PL'});
     disp(tab)
     disp('=================================');
 end;
+
+
+
+
+%% Generating data accordig to IRT with different parameters and estimating
+b = [-4:2:4];
+a = 0.8:0.2:1.2;
+c = [0.2:0.1:0.4];
+pars = [];
+for b_ = b
+    for a_ = a
+        for c_ = c
+            pars(end + 1,:) = [b_, a_, c_];
+        end;
+    end;
+end;
+
+PL3 = {};
+EPi3 = [];
+Observed = [];
+% then calling Estimating (1) and presenting (2)
+
 
 save('work.mat');
