@@ -17,7 +17,7 @@ function res=ItemPerformance(th, item_parameters)
 %  Dimitar Atanasov, 2014
 %  datanasov@ir-statistics.net
 
-
+res = [];
 for k = 1:size(item_parameters,1)
    res(k,:) = irt.LogisticProbability(item_parameters(k,:),th);
 end;

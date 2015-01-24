@@ -24,7 +24,7 @@ if nargin == 1
     o = lsdm.Options;
 end;
 
-
+th = o.IRT.LatentTraitValues;
 
 if size(cd_values,2) ~= size(th,2)
     error('Dimension of the input parameters must agree');

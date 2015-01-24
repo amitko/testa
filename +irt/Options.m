@@ -37,6 +37,6 @@ if nargin > 0
 	end;
 end;
 
-options.LatentTraitValues   = linspace(option.LatentTraitInterval(1),option.LatentTraitInterval(2),option.LatentTraitPoints);
+option.LatentTraitValues   = linspace(option.LatentTraitInterval(1),option.LatentTraitInterval(2),option.LatentTraitPoints);
 
 
