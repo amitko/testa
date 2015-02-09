@@ -26,6 +26,5 @@ for item = 1:size(par,1)
     end;
 end;
 
-o.
 
 res = irt.PlotItemPerformance(item_performance,o);
