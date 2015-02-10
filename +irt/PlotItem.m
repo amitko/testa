@@ -14,7 +14,7 @@ function res=PlotItem(par,o)
 % datanasov@ir-statistics.net
 
 
-if nargin <2 
+if nargin < 2 || isempty(o)
     o = irt.Options;
 end;
 

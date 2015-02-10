@@ -6,5 +6,5 @@ function res = transformTestParameters(origTestParameters, A, B)
 
 res = [];
 for k = 1:size(origTestParameters,1)
-    res = [res; [origTestParameters(k,1)/A, origTestParameters(k,2)*A + B, origTestParameters(k,3)]];
+    res = [res; [origTestParameters(k,1)*A + B, origTestParameters(k,2)/A, origTestParameters(k,3)]];
 end;
