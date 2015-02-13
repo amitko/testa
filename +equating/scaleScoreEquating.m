@@ -1,16 +1,18 @@
 function res = scaleScoreEquating (Data, options)
 
+% Dimitar Atanasov, 2015
+% datanasov@ir-statistics.net
+
 if nargin < 2
-    options.type = 'NCE';
-    options.add   = [0,1];
+    option = equating.Options();
 end;
 
-if strcmp(options.type,'NCE')
-    res = scaleNCEfromTotal(Data(:,3), options.add(1), options.add(2));
+if strcmp(options.EquatingType,'NCE')
+    res = scaleNCEfromTotal(Data(:,3), options.EquatingAdd(1), options.EquatingAdd(2));
 
 elseif strcmp(options.type,'SubDomain')
     % options.add = [numberOfItemsInTheTest]
-    res = Data(:,3) .* (size(Data,1) / options.add);
+    res = Data(:,3) .* (size(Data,1) / options.EquatingAdd(1));
 else
     res = [];
 end;

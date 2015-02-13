@@ -3,6 +3,8 @@ function res = transformTestParameters(origTestParameters, A, B)
 % Transforming test parameters to the test at the end of the sequence
 %
 
+% Dimitar Atanasov, 2015
+% datanasov@ir-statistics.net
 
 res = [];
 for k = 1:size(origTestParameters,1)

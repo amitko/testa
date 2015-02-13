@@ -11,6 +11,9 @@ function [A, B] = scaleItemParameters( baseTest, targetTest, commonItems)
 %               (1,:) items indexes in base test
 %               (2,:) items indexes in target test
 
+% Dimitar Atanasov, 2015
+% datanasov@ir-statistics.net
+
 maT = mean( targetTest( commonItems(2,:), 2 ));
 mbT = mean( targetTest( commonItems(2,:), 1 ));
 
