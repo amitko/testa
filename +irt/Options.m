@@ -18,6 +18,8 @@ option.irtModels            = {'1PL' '2PL' '3PL'};
 option.Model                = 1;
 option.D                    = 1.702;
 
+option.VarOfLatentTrait     = 2;
+
 option.LSDMModel            = 1;
 option.LSDMShowMad          = 'Yes';
 option.LSDMReachedLevel     = 0.5;
