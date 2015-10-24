@@ -161,7 +161,7 @@ while iter < o.NofIterations_EM
      end;
  
     if sum(abs(fVal_old - fVal)') < o.MaxFunTol
-        disp(['Exit after ' num2str(iter) 'iterarions.'])
+        disp(['Exit after ' num2str(iter) ' iterarions.'])
         break;
     end;
      

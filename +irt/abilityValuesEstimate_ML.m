@@ -25,17 +25,13 @@ function [res] = abilityValuesEstimate_ML(response,params,trait_0,o)
     end;
 
    
-    if size(response,2) ~= size(par,1)
+    if size(response,2) ~= size(params,1)
         error('Responses and parameters does not match');
     end;
 
 
-    if size(response,1) ~= size(trait,1)
-        error('Responses and scores does not match');
-    end;
-
     for k = 1:size(response,1)
-        res(k) = latent_value_estimate(response(k,:), params, trait_0(k), o)
+        res(k) = latent_value_estimate(response(k,:), params, trait_0(k), o);
     end;
 
 

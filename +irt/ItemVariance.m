@@ -15,7 +15,7 @@ res=[];
 for pp = parameters'
     pp = pp';
     p = irt.LogisticProbability(pp,theta,o.D);
-    res(end+1) = p .* ( 1 - p ); 
+    res(end+1,:) = p .* ( 1 - p );
 end;
 
 res = res';
