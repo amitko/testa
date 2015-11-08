@@ -23,7 +23,7 @@ S = [];
 SA = [];
 
 for k = 1:length(testSequence)-1
-    [a,b] = scaleItemParameters(testSequence{k},testSequence{k+1},commonItems{k});
+    [a,b] = equating.scaleItemParameters(testSequence{k},testSequence{k+1},commonItems{k});
     S(k,:) = [a b];
     As = [As a];
     A = A*a;

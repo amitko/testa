@@ -1,10 +1,10 @@
-function [A, B] = scaleItemParameters( baseTest, targetTest, commonItems)
+function [A, B] = scaleItemParameters( baseTest, currentTest, commonItems)
 % Function [A, B] = equating.scaleItemParameters( baseTest, targetTest, commonItems)
 % baseTest    - Y (right in the sequence X->Y )
 %              [difficulty, discr, guess] 
 %              [          b,    a,     c] 
 %   
-% targetTest  - X
+% currentTest  - X
 %              [difficulty, discr, guess] 
 %              [          b,    a,     c] 
 % commonItems - matrix with two rows 
@@ -14,8 +14,8 @@ function [A, B] = scaleItemParameters( baseTest, targetTest, commonItems)
 % Dimitar Atanasov, 2015
 % datanasov@ir-statistics.net
 
-maT = mean( targetTest( commonItems(2,:), 2 ));
-mbT = mean( targetTest( commonItems(2,:), 1 ));
+maT = mean( currentTest( commonItems(2,:), 2 ));
+mbT = mean( currentTest( commonItems(2,:), 1 ));
 
 maB = mean( baseTest( commonItems(1,:), 2 ));
 mbB = mean( baseTest( commonItems(1,:), 1 ));

@@ -1,4 +1,4 @@
-function res=ItemPerformance(item_parameters,o)
+function res=ItemPerformance(item_parameters,th,o)
 % Function res = expected.ItemPerformance(th, item_parameters)
 %   returns prtformance of the set of items defined
 %   by their IRT parameters
@@ -17,12 +17,14 @@ function res=ItemPerformance(item_parameters,o)
 %  Dimitar Atanasov, 2014
 %  datanasov@ir-statistics.net
 
-if nargin < 2 || isempty(o)
+if nargin < 3 || isempty(o)
     o = irt.Options;
 end;
 
 res = [];
-th = o.LatentTraitValues;
+if nargin < 2
+    th = o.LatentTraitValues;
+end;
 
 for k = 1:size(item_parameters,1)
    res(k,:) = irt.LogisticProbability(item_parameters(k,:),th);

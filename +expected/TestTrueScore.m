@@ -17,7 +17,7 @@ res = [];
 for t = th
     r = 0;
     for p = params'
-        r = r + irt.ItemPerformance(t,p');
+        r = r + irt.ItemPerformance(p',t);
     end;
     res = [res r];
 end;
