@@ -1,5 +1,5 @@
 function [pars,SE]=ItemParametersEstimate_EM_3PL( data,o)
-%  Function [pars,ability] = irt.ItemParametersEstimate_EM_1PL( data,o)
+%  Function [pars,ability] = irt.ItemParametersEstimate_EM_3PL( data,o)
 %      estimates the parameters of the item characreristic
 %      curves under the IRT model usen the EM algorith.
 %
@@ -8,6 +8,7 @@ function [pars,SE]=ItemParametersEstimate_EM_3PL( data,o)
 %      o    - irt.Options (optional)
 %  Output:
 %      pars - Item parapeters
+%           [difficulty, discrimination, guessing]
 
 % Realizes according to the report for NCA
 % Marginal Maximum Likelihood Estimation
@@ -20,6 +21,10 @@ function [pars,SE]=ItemParametersEstimate_EM_3PL( data,o)
 
 if nargin < 2
     o = irt.Options;
+end;
+
+if o.Model < 3 
+    error('This function is prepared for 3PL model only')
 end;
 
 [N,J] = size(data);
@@ -71,9 +76,8 @@ while iter < o.NofIterations_EM
     if iter > 1
         xi_t = xi_new;
     end;
-    
-    % FIXME: Acceleration seems to work wrongly
-    % Calculate new step values
+
+    % Acceleration of convergence
     if iter >= 2
         xi_t1 = xi_t;
         xi_t = xi_new;
@@ -82,8 +86,6 @@ while iter < o.NofIterations_EM
         xi_t1 = xi_t;
         xi_t = calculateNextParameters(xi_new,xi_t1,xi_t2);
     end;
-    %xi_t = clearParameters(xi_t,o)
-
 
     % Equation 16
     EL = zeros(m,N); %Examinee likelihood
@@ -115,7 +117,7 @@ while iter < o.NofIterations_EM
     for k = 1:m
         nq(k) = sum( P(k,:),2 );
         if isnan(nq(k))
-            nq(k) = N .* quadratureWeights(k);  %0
+            nq(k) = N .* quadratureWeights(k);
         end;
     end;
 
@@ -128,12 +130,6 @@ while iter < o.NofIterations_EM
             end;
         end;
     end;
-
-    %Added to fit the distribution of the responses
-    % FIXME: amitko is this should be done
-    %quadratureWeights = nq./N;
-
-
     toc
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -146,10 +142,10 @@ while iter < o.NofIterations_EM
     disp('--- --- Calculating weigths...');
     tic
     w = zeros(J,m);
-    for j = 1:J
+    parfor j = 1:J
         for q = 1:m
             Pj = log_prob_3pl(quadratureNodes(q),xi_t(j,:),o);
-            Ps = log_prob_3pl(quadratureNodes(q),[xi_t(j,[1,2]) 0],o);
+            Ps = log_prob_2pl(quadratureNodes(q),xi_t(j,[1,2]),o);
             w(j,q) = (Ps .* (1 - Ps)) ./ (Pj .* (1 - Pj));
             if isnan(w(j,q)) || isinf(w(j,q))
                 w(j,q) = 0.5;
@@ -159,7 +155,7 @@ while iter < o.NofIterations_EM
     toc
     xi_new = zeros(J,3);
     fVal = zeros(J,3);
-     for j = 1:J % for each item
+    parfor j = 1:J % for each item
          disp(['--- --- Estimate item ' num2str(j) '...'])
          tic
          F = @(x) linEqnForParamForItem(x,quadratureNodes,nq,rk(j,:),w(j,:),o);
@@ -197,7 +193,7 @@ disp('Estimating SE ...');
 % xi_t is the last one, calculated in M-step
 % w(j,q) are the last one, calculated in M-step
 SE = zeros(J,3);
-parfor j = 1:J
+for j = 1:J
     disp(['SE for item ' num2str(j)]);
     tic
     d2L = zeros(3,3);
@@ -206,27 +202,39 @@ parfor j = 1:J
         S2 = 0;
         S3 = 0;
         for q = 1:m
-            PP = log_prob(quadratureNodes(q),xi_t(j,:),o);
-            PPs = log_prob(quadratureNodes(q),[xi_t(j,[1,2]) 0],o);
+            % Equation 41
+            PP = log_prob_3pl(quadratureNodes(q),xi_t(j,:),o);
+            PPs = log_prob_2pl(quadratureNodes(q),xi_t(j,[1,2]),o);
             T =  P(q,k) .* (data(k,j) - PP);
-            S1 = S1 + T .* w(j,q);
-            S2 = S2 + T .* w(j,q) .* (quadratureNodes(q) - xi_t(1));
-            S3 = S3 + T ./ PP .* ( 1 - PP) .* (1 - PPs);
+            S1 = S1 + T .* w(j,q) .* (quadratureNodes(q) - xi_t(1));
+            S2 = S2 + T .* w(j,q);
+            S3 = S3 + (T ./ (PP .* ( 1 - PP)) .* (1 - PPs));
         end;
-        li_db = - o.D .* exp( xi_t(2) ) .* (1 - xi_t(3)) .* S1;
-        li_dalpha = o.D .* exp( xi_t(2) ) .* (1 - xi_t(3)) .* S2;
+        li_db = - o.D .* exp( xi_t(2) ) .* (1 - Psi(xi_t(3))) .* S2;
+        li_dalpha = o.D .* exp( xi_t(2) ) .* (1 - Psi(xi_t(3))) .* S1;
         li_dc = S3;
 
         % Equation 42
-        d2L = d2L + [li_db * li_db li_db * li_dalpha li_db * li_dc; li_dalpha * li_db li_dalpha * li_dalpha li_dalpha * li_dc; li_dc * li_db li_dc * li_dalpha li_dc * li_dc];
+        d2L = d2L + [li_db * li_db li_db * li_dalpha li_db * li_dc;... 
+                     li_dalpha * li_db li_dalpha * li_dalpha li_dalpha * li_dc; ...
+                     li_dc * li_db li_dc * li_dalpha li_dc * li_dc];
     end;
     % Equation 43
-    d2g = [- 1 / o.priorDistributionParameters.alpha(2), 0, 0; 0, - 1 / o.priorDistributionParameters.b(2), 0; 0, 0, -(o.priorDistributionParameters.c(1) - 1)/xi_t(j,3)^2 - (o.priorDistributionParameters.c(2) - 1)/(1 - xi_t(j,3))^2 ];
+    d2g = [ - 1 / o.priorDistributionParameters.b(2), 0, 0; ...
+            0, - 1 / o.priorDistributionParameters.alpha(2), 0; ...
+            0, 0, -(o.priorDistributionParameters.c(1) - 1)/Psi(xi_t(j,3))^2 - (o.priorDistributionParameters.c(2) - 1)/(1 - Psi(xi_t(j,3)))^2 ];
 
-    % Equation 28
-    itemInf = d2L - d2g;
+    % Equation 37
+      itemInf = d2L - d2g;
 
-    SE(j,:) = sqrt(diag(inv(itemInf))');
+    
+    se = sqrt(diag(inv(itemInf))');
+    if all(se > xi_t(j,:) * 0.1)
+        SE(j,:) = [0 0 0];
+        warning('SE is not estimated correctly!!!')
+    else
+        SE(j,:) = se;
+    end;
     toc
 end;
 
@@ -243,15 +251,11 @@ end;
 
  % Equation 1
  function res=log_prob_3pl(th,params_e,o)
-     %res = params_e(:,3) + ((1 - params_e(:,3)) .* exp( exp(params_e(:,2)) .* o.D .* ( th - params_e(:,1))) ./ (1 + exp( exp(params_e(:,2)) .* o.D .* ( th - params_e(:,1)))));
     res = Psi(params_e(:,3)) + (1 - Psi(params_e(:,3))) .* Psi(o.D .* exp(params_e(:,2)) .* ( th - params_e(:,1)) );
-     
+ 
  function res=log_prob_2pl(th,params_e,o)
-     res = exp( exp(params_e(:,2)) .* o.D .* ( th - params_e(:,1))) ./ (1 + exp( exp(params_e(:,2)) .* o.D .* ( th - params_e(:,1))));
-
- function res=log_prob_1pl(th,params_e,o)
-     res = exp( exp(1) .* o.D .* ( th - params_e(:,1))) ./ (1 + exp( exp(1) .* o.D .* ( th - params_e(:,1))));
-
+    res = Psi(o.D .* exp(params_e(:,2)) .* ( th - params_e(:,1)) );
+ 
 % Ecuation 35
 function res = calculateNextParameters(xii,xii1,xii2)
     
@@ -269,17 +273,6 @@ function res = calculateNextParameters(xii,xii1,xii2)
     
     res = [res(:,1) log(res(:,2)) log(res(:,3) ./ (1 - res(:,3)))];
     
-
-function  res=clearParameters(res,o)
-    res( res(:,1) > o.LatentTraitInterval(2), 1 ) = o.LatentTraitInterval(2);
-    res( res(:,1) < o.LatentTraitInterval(1), 1 ) = o.LatentTraitInterval(1);
-
-    res( res(:,2) > 2, 2 )  = 2;
-    res( res(:,2) < -1, 2 ) = -1;
-
-    res( res(:,3) > 0.5, 3 ) = 0.5;
-    res( res(:,3) < 0, 3 ) = 0.01;
-
 % Equation 30
 function res = linEqnForParamForItem(xi,quadratureNodes,n,r,w,o)
     %log_prob = o.LogisticsModelFunctionReference;
@@ -291,36 +284,25 @@ function res = linEqnForParamForItem(xi,quadratureNodes,n,r,w,o)
         P = log_prob_3pl( quadratureNodes(q),xi,o);
         PP = r(q) - (n(q) .* P);
         PP1 = PP .* w(q);
-        % xi(2)
         S1 = S1 + ( PP1 .* (quadratureNodes(q) - xi(1)) );
         S2 = S2 + PP1;
         S3 = S3 + PP .* (1 / P );
 
     end;
 
-    %FIXME without prior distr.
-
     res(1) = - o.D * exp(xi(2)) * ( 1 - Psi(xi(3))) * S2...
         - ((xi(1) - o.priorDistributionParameters.b(1))/ o.priorDistributionParameters.b(2));
-
-    if o.Model > 1
-        res(2) = o.D * exp(xi(2)) * ( 1 - Psi(xi(3))) * S1...
+    res(2) = o.D * exp(xi(2)) * ( 1 - Psi(xi(3))) * S1...
             - ((xi(2) - o.priorDistributionParameters.alpha(1))/ o.priorDistributionParameters.alpha(2));
-
-    end;
-
-    if o.Model > 2
-        res(3) = (1/(1 - Psi(xi(3)))) * S3...
+    res(3) = (1/(1 - Psi(xi(3)))) * S3...
             + ((o.priorDistributionParameters.c(1) - 1)/Psi(xi(3))) - ((o.priorDistributionParameters.c(1) - 1)/(1 - Psi(xi(3))));
 
-    end;
-
+        
 % Norm for Equation 34
 function res = mnorm(X)
     res = sqrt(sum(sum(X.^2)'));
 
-    
-    
+% Logistic function        
  function res = Psi(x)
     res = 1./(1 + exp(-x));
 
