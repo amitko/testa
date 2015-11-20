@@ -3,7 +3,7 @@ function option = Options(varargin)
 
 option.NofLatentsCategories = 30;
 
-option.LatentTraitInterval  = [-7 7];
+option.LatentTraitInterval  = [-3 3];
 
 option.LatentTraitPoints    = 30;
 
