@@ -1,4 +1,4 @@
-function [pars,ability]=ItemParametersEstimate_EM_3PL( data, o)
+function [pars,ability]=ItemParametersEstimate_EM_3PL_1( data, o)
 %  Function [pars,ability] = irt.ItemParametersEstimate_EM_1PL( data,o)
 %      estimates the parameters of the item characreristic
 %      curves under the IRT model usen the EM algorith.
