@@ -181,7 +181,7 @@ while iter < o.NofIterations_EM
 
 end; % while cicle
 
-% prepare the autput
+% prepare the output
 pars = [xi_t(:,1) exp(xi_t(:,2)) Psi(xi_t(:,3))];
 
 if nargout < 2
