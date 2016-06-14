@@ -1,23 +1,27 @@
-function res=ItemInformation(a,th,o)
+function res=ItemInformation(itemParameters,abilityValue,o)
 %Function res = expected.ItemInformation(a,th)
 %   Returns item information function
 %
 %   INPUT: 
-%       a - item paramethers
+%       itemParameters - item paramethers
 %           [difficulty dicriminative gest]
-%       th - ability value
+%       abilityValue - ability value
+%       
+%       o - irt.Options
 %
 %   OUTPUT:
 %       res(k) - Item information for ability th(k)
 
-% Dimitar Atanasov 2014
+% Dimitar Atanasov 2016
 % datanasov@ir-statistics.net
 
-if size(a,2) == 1
-    a = [a 1 0];
-elseif size(a,2) == 2
-    a = [a 0];
-elseif size(a,2) > 3
+[nI,nP] = size(itemParameters);
+
+if nP == 1
+    itemParameters = [itemParameters ones(nI,1) zeros(nI,1)];
+elseif nP == 2
+    itemParameters = [itemParameters zeros(nI,1)];
+elseif nP > 3
     error('Wrong input argument!');
 end;
 
@@ -29,18 +33,15 @@ d = o.D;
 
 res = [];
 
-if a(2) == 0
-    a(2) = 1;
-end;
+aO = ones(1,size(itemParameters(:,1),1))';
+thO = ones(1,size(abilityValue,2));
 
-for k = 1:size(th,2)
+p = irt.LogisticProbability(itemParameters,abilityValue,d);
+    
+p(p > 1 - eps) = 1 - eps;
 
-    p = irt.LogisticProbability(a,th(k));
-    
-    p1 = (a(2).*d.*exp(a(2).*d.*(a(1) - th(k))).*(a(3) - 1))/(exp(a(2).*d.*(a(1) - th(k))) + 1).^2;
-    if p > 1 - eps
-        p = 1 - eps;
-    end
-    res(k) = p1.^2 / (p.*(1-p));
-end;
-    
+% 1.21 from van der Linden - Linear Models for Optimal Test Desigh.  
+
+res = (itemParameters(:,2).^2 * thO) .* ( (1 - p) ./ p) .* ( ( p - itemParameters(:,3) * thO ) ./ (1 - (itemParameters(:,3) * thO)) ).^2;
+
+

@@ -1,16 +1,19 @@
-function res=LogisticProbability(a,th,d)
+function res=LogisticProbability(itemParameters,abilityValue,d)
 % Function irt.LogisticProbability(a,th)
 %   returns the probability for IRT logistic model
 %
 %   INPUT:
-%       a - parameters of the model
-%           [difficulty dicriminative gest]
-%       th - level of ability
+%       itemParameters - parameters of the model
+%                        [difficulty dicriminative gest]
+%       abilityValue - level of ability
+%       
 %       d  - value of the scaling parameter
 %           by default 1.702
 
-% Dimitar Atanasov 2014
+% Dimitar Atanasov 2016
 % datanasov@ir-statistics.net
+
+
 
 
 if nargin < 2
@@ -21,14 +24,21 @@ if nargin < 3
     d = 1.702;
 end;
 
-if size(a,2) < 3
-    a(3) = 0;
+
+[nI,nP] = size(itemParameters);
+
+if nP == 1
+    itemParameters = [itemParameters ones(nI,1) zeros(nI,1)];
+elseif nP == 2
+    itemParameters = [itemParameters zeros(nI,1)];
+elseif nP > 3
+    error('Wrong input argument!');
 end;
 
-if a(2) == 0
-    a(2) = 1;
-end;
 
-res = a(3) + ( 1 - a(3)) ./ (1 + exp( d .*a(2) .* ( a(1) - th ) ));
+aO = ones(1,size(itemParameters(:,1),1))';
+thO = ones(1,size(abilityValue,2));
+ 
+res = (itemParameters(:,3) * thO) + ( 1 - itemParameters(:,3) * thO) ./ (1 + exp( d .* (itemParameters(:,2) * thO) .* ( itemParameters(:,1) * thO - aO * abilityValue ) ));
 
 
