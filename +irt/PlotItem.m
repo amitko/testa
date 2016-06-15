@@ -10,7 +10,7 @@ function res=PlotItem(par,o)
 %   OUTPUT:
 %   	res - 1
 
-% Dimitar Atanasov, 2014
+% Dimitar Atanasov, 2016
 % datanasov@ir-statistics.net
 
 
@@ -20,11 +20,6 @@ end;
 
 th = o.LatentTraitValues;
 
-for item = 1:size(par,1)
-    for ability = 1:size(th,2)
-        item_performance(item,ability) = irt.LogisticProbability(par(item,:),th(ability));
-    end;
-end;
-
+item_performance = irt.LogisticProbability(par,th);
 
 res = irt.PlotItemPerformance(item_performance,o);

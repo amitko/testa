@@ -14,7 +14,7 @@ function parsQ = AttributeParametersEstimate(pars, Q, o)
 %   Output:
 %       IRT paramethers of the attributes
 
-% Dimitar Atanasov, 2014
+% Dimitar Atanasov, 2016
 % datanasov@ir-statistics.net
 
 
@@ -24,9 +24,10 @@ end;
 
 th = o.IRT.LatentTraitValues;
 
-for k = 1:size(Q,1)
-   p(k,:) = irt.LogisticProbability(pars(k,:),th);
-end;
+%for k = 1:size(Q,1)
+%   p(k,:) = irt.LogisticProbability(pars(k,:),th);
+%end;
+p = irt.LogisticProbability(pars,th);
 
 attr_prob = lsdm.AttributePerformance(p,Q,o);
 
