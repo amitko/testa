@@ -1,4 +1,4 @@
-function [pars,SE]=ItemParametersEstimate_EM_3PL( data,o)
+function [pars,SE]=ItemParametersEstimate_EM_3PL_t( data,o)
 %  Function [pars,ability] = irt.ItemParametersEstimate_EM_3PL( data,o)
 %      estimates the parameters of the item characreristic
 %      curves under the IRT model usen the EM algorith.
@@ -90,31 +90,23 @@ while iter < o.NofIterations_EM
     % Equation 16
     EL = zeros(m,N); %Examinee likelihood
     disp('--- --- Calculating examinee likelihood ...')
+    
+    itemProb = log_prob_3pl(quadratureNodes,xi_t,o);
     tic
-    for k = 1:m % for latent categories
-        for l = 1:N %for examinees
-            EL(k,l) = examineeLikelihood(data(l,:),quadratureNodes(k),xi_t,o);
-        end;
-    end;
-    toc
-
-    disp('--- --- Calculating conditional disttribution of latent categories ...')
-    tic
-
-    %Equation 16
-    for l = 1:N %for examinees
+    for l = 1:N
+        zz = examineeLikelihood_1(data(l,:),itemProb);
+        EL(:,l) = examineeLikelihood_1(data(l,:),itemProb);
         denom = EL(:,l)' * quadratureWeights';
-        for k = 1:m % for latent categories
-            P(k,l) = ( EL(k,l) .* quadratureWeights(k) ) ./  denom;
-        end;
+        P(:,l) = ( EL(:,l) .* quadratureWeights' ) ./  denom;
     end;
     toc
+    
 
     disp('--- --- Calculating expected values ...')
     tic
     % Equarion 15
     nq = zeros(1,m);
-    for k = 1:m
+    for k = 1:m % for latent categories
         nq(k) = sum( P(k,:),2 );
         if isnan(nq(k))
             nq(k) = N .* quadratureWeights(k);
@@ -142,17 +134,12 @@ while iter < o.NofIterations_EM
     disp('--- --- Calculating weigths...');
     tic
     w = zeros(J,m);
-    parfor j = 1:J
-        for q = 1:m
-            Pj = log_prob_3pl(quadratureNodes(q),xi_t(j,:),o);
-            Ps = log_prob_2pl(quadratureNodes(q),xi_t(j,[1,2]),o);
-            w(j,q) = (Ps .* (1 - Ps)) ./ (Pj .* (1 - Pj));
-            if isnan(w(j,q)) || isinf(w(j,q))
-                w(j,q) = 0.5;
-            end;
-        end
-    end
+    Pj = log_prob_3pl(quadratureNodes,xi_t,o);
+    Ps = log_prob_2pl(quadratureNodes,xi_t(:,[1,2]),o);
+    w = (Ps .* (1 - Ps)) ./ (Pj .* (1 - Pj));
+    w( isnan(w) | isinf(w) ) = 0.5;
     toc
+ 
     xi_new = zeros(J,3);
     fVal = zeros(J,3);
     parfor j = 1:J % for each item
@@ -193,32 +180,32 @@ disp('Estimating SE ...');
 % xi_t is the last one, calculated in M-step
 % w(j,q) are the last one, calculated in M-step
 SE = zeros(J,3);
-for j = 1:J
+
+PP = log_prob_3pl(quadratureNodes,xi_t,o);
+PPs = log_prob_2pl(quadratureNodes,xi_t(:,[1,2]),o);
+
+oP = ones(size(PP,2),1);
+
+for j = 1:J % for each item
     disp(['SE for item ' num2str(j)]);
     tic
-    d2L = zeros(3,3);
-    for k = 1:N
-        S1 = 0;
-        S2 = 0;
-        S3 = 0;
-        for q = 1:m
-            % Equation 41
-            PP = log_prob_3pl(quadratureNodes(q),xi_t(j,:),o);
-            PPs = log_prob_2pl(quadratureNodes(q),xi_t(j,[1,2]),o);
-            T =  P(q,k) .* (data(k,j) - PP);
-            S1 = S1 + T .* w(j,q) .* (quadratureNodes(q) - xi_t(1));
-            S2 = S2 + T .* w(j,q);
-            S3 = S3 + (T ./ (PP .* ( 1 - PP)) .* (1 - PPs));
-        end;
-        li_db = - o.D .* exp( xi_t(2) ) .* (1 - Psi(xi_t(3))) .* S2;
-        li_dalpha = o.D .* exp( xi_t(2) ) .* (1 - Psi(xi_t(3))) .* S1;
+    d2L = zeros(3,3);    
+    
+     for k = 1:N % For each examinee
+        T =  P(:,k) .* (data(k,j) * oP - PP(j,:)');
+        S1 = sum(T .* w(j,:)' .* (quadratureNodes' - xi_t(j,1)));
+        S2 = sum(T .* w(j,:)');
+        S3 = sum((T ./ (PP(j,:)' .* ( 1 - PP(j,:)' )) .* (1 - PPs(j,:)')));
+
+        li_db = - o.D .* exp( xi_t(j,2) ) .* (1 - Psi(xi_t(j,3))) .* S2;
+        li_dalpha = o.D .* exp( xi_t(j,2) ) .* (1 - Psi(xi_t(j,3))) .* S1;
         li_dc = S3;
 
         % Equation 42
         d2L = d2L + [li_db * li_db li_db * li_dalpha li_db * li_dc;... 
-                     li_dalpha * li_db li_dalpha * li_dalpha li_dalpha * li_dc; ...
-                     li_dc * li_db li_dc * li_dalpha li_dc * li_dc];
-    end;
+                 li_dalpha * li_db li_dalpha * li_dalpha li_dalpha * li_dc; ...
+                 li_dc * li_db li_dc * li_dalpha li_dc * li_dc];
+     end;
     % Equation 43
     d2g = [ - 1 / o.priorDistributionParameters.b(2), 0, 0; ...
             0, - 1 / o.priorDistributionParameters.alpha(2), 0; ...
@@ -234,7 +221,7 @@ for j = 1:J
         warning('SE is not estimated correctly!!!')
     else
         SE(j,:) = se;
-    end;
+   end;
     toc
 end;
 
@@ -249,12 +236,29 @@ end;
  pq = prod(1 - P(II));
  res = pp * pq;
 
+ function res=examineeLikelihood_1(examineeResponse,P)
+ aa = examineeResponse' * ones(1,size(P,2));
+ I = examineeResponse == 1;
+ II = examineeResponse == 0;
+ pp = aa .* P;
+ pq = ( 1 - aa ) .* (1 - P);
+ res = prod((pp.^aa) .* (pq).^ (1-aa));
+ 
+ 
  % Equation 1
- function res=log_prob_3pl(th,params_e,o)
-    res = Psi(params_e(:,3)) + (1 - Psi(params_e(:,3))) .* Psi(o.D .* exp(params_e(:,2)) .* ( th - params_e(:,1)) );
+function res=log_prob_3pl(th,params_e,o)
+    aO = ones(1,size(params_e(:,1),1))';
+    thO = ones(1,size(th,2));
+
+    res = Psi(params_e(:,3) * thO) + (1 - Psi(params_e(:,3) * thO)) .* Psi(o.D .* exp(params_e(:,2) * thO) .* ( aO * th - params_e(:,1) * thO) );
+
+
+     %   res = Psi(params_e(:,3)) + (1 - Psi(params_e(:,3))) .* Psi(o.D .* exp(params_e(:,2)) .* ( th - params_e(:,1)) );
  
  function res=log_prob_2pl(th,params_e,o)
-    res = Psi(o.D .* exp(params_e(:,2)) .* ( th - params_e(:,1)) );
+    aO = ones(1,size(params_e(:,1),1))';
+    thO = ones(1,size(th,2));
+    res = Psi(o.D .* exp(params_e(:,2) * thO) .* ( aO * th - params_e(:,1) * thO) );
  
 % Ecuation 35
 function res = calculateNextParameters(xii,xii1,xii2)

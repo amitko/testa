@@ -1,5 +1,7 @@
 function res = multipleTest(nOfTest, nOfItems, itemParams, varargin)
 
+% Required items can be alligned with 0
+
 % =====  parse the inputs ====
 
 inP = inputParser;
@@ -38,6 +40,11 @@ parse(inP, nOfTest, nOfItems, itemParams, varargin{:});
 
 disp('===== Compose multiple test with parameters ====');
 inP.Results
+
+% ====== Check =====
+if ~isempty(inP.Results.requiredItems) && (size(inP.Results.requiredItems,1) ~= nOfTest)
+    error('Required items does not match teh number of tests!!!');
+end;
 
 % ====== Init Values =====
 
@@ -94,6 +101,16 @@ for k = 1:nOfTest
         Ae = [Ae; zr];
         be = [be; 0];
     end;
+    
+    % required items forced to be 1 : Ax = size(requiredItems)
+    if ~isempty(inP.Results.requiredItems)
+        reqItems = inP.Results.requiredItems(k,inP.Results.requiredItems(k,:) > 0);
+        zr = zeros(1,numItems * 2);
+        zr(reqItems) = 1;
+        Ae = [Ae; zr];
+        be = [be; size(reqItems,2)];
+    end;
+
 
     % ===== Optimizing =======
     %x = intlinprog(f,IntCon,A,b,Ae,be,lb,ub);
