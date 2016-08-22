@@ -18,6 +18,8 @@ def_addEqualitiesLHS = [];
 def_addEqualitiesRHS = [];
 def_addInequalitiesLHS = [];
 def_addInequalitiesRHS = [];
+def_targetFunction = [];
+
 
 addRequired(inP,'nOfTest',@isnumeric);
 addRequired(inP,'nOfItems',@isnumeric);
@@ -33,6 +35,8 @@ addParameter(inP,'addEqualitiesLHS',def_addEqualitiesLHS,@isnumeric);
 addParameter(inP,'addEqualitiesRHS',def_addEqualitiesRHS,@isnumeric);
 addParameter(inP,'addInequalitiesLHS',def_addInequalitiesLHS,@isnumeric);
 addParameter(inP,'addInequalitiesRHS',def_addInequalitiesRHS,@isnumeric);
+
+addParameter(inP,'targetFunction',def_targetFunction,@isnumeric);
 
 
 %parse(inP, nOfItems, itemParams, abilityScaleValues,varargin{:});
@@ -57,8 +61,6 @@ IntCon = 1:numItems;
 
 itemInf = expected.ItemInformation(itemParams,inP.Results.abilityScaleValues);
 
-% === Equality constraints ====
-
 res = [];
 excludedItems = [];
 
@@ -66,32 +68,63 @@ if ~isempty(inP.Results.excludedItems)
     excludedItems = inP.Results.excludedItems;
 end;
 
+if ~isempty(inP.Results.targetFunction)
+    f = [inP.Results.targetFunction inP.Results.targetFunction];
+else
+    f = ones(1,numItems * 2);
+end;
+    
+
 for k = 1:nOfTest
     
-   
+    % === Equality constraints ====
+
     % number of items in the test
     Ae = [ones(1,numItems), zeros(1,numItems); zeros(1,numItems) , ones(1,numItems) ];
     be = [nOfItems; nOfItems * (nOfTest - k) ];
-
-    f = ones(1,numItems * 2);
-
+    
     % === Inequality constraints ====
     A = [];
     b = [];
     
+    % No item overlap
     A = [zeros(numItems) eye(numItems)];
     b = ones(numItems,1) .* (nOfItems + 1);
     
+    
     % greater than the target TIF
+    
+    if k == nOfTest
+        shadowTestScale = 1;
+    else
+        shadowTestScale = (nOfTest - k);
+    end;
+    
     if ~isempty(inP.Results.targetInfFunctionValuesDN)
-        A = [A; -itemInf' zeros(size(itemInf')); -itemInf' zeros(size(itemInf'))];
-        b = [b; -inP.Results.targetInfFunctionValuesDN'; -inP.Results.targetInfFunctionValuesDN'];
+        A = [
+            A; ...
+            -itemInf' zeros(size(itemInf'));...
+%            zeros(size(itemInf')) -itemInf';...
+            ];
+        b = [
+            b; ...
+            -inP.Results.targetInfFunctionValuesDN'; ...
+%            -inP.Results.targetInfFunctionValuesDN' .* shadowTestScale ...
+            ];
     end;
 
     % smaller than the target TIF
     if ~isempty(inP.Results.targetInfFunctionValuesUP)
-        A = [A; itemInf' zeros(size(itemInf')); itemInf' zeros(size(itemInf'))];
-        b = [b; inP.Results.targetInfFunctionValuesUP'; inP.Results.targetInfFunctionValuesUP'];
+        A = [
+            A;...
+            itemInf' zeros(size(itemInf'));...
+ %           zeros(size(itemInf')) itemInf';...
+            ];
+        b = [
+            b;...
+            inP.Results.targetInfFunctionValuesUP';...
+ %           inP.Results.targetInfFunctionValuesUP' .* shadowTestScale ...
+            ];
     end;
     
     % excluded items forced to be 0 : Ax = 0
@@ -114,7 +147,6 @@ for k = 1:nOfTest
 
     % ===== Optimizing =======
     %x = intlinprog(f,IntCon,A,b,Ae,be,lb,ub);
-    %inCurrentTest = find(x(1:numItems) == 1);
     
     inCurrentTest = compose.singleTest(nOfItems + nOfItems * (nOfTest - k), [itemParams; itemParams], ...
                                     'abilityScaleValues', inP.Results.abilityScaleValues,...
@@ -127,6 +159,7 @@ for k = 1:nOfTest
                                     );
     
     res = [res inCurrentTest(1:nOfItems)];
+    
     excludedItems = [excludedItems; inCurrentTest(1:nOfItems)];
     
 end;

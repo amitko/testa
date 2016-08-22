@@ -22,13 +22,25 @@ if size(a,2) > 1 && isempty( find( a(:,2) ) )
     a = [a 1];
 end;
 
-if size(a,2) == 1
-    a = [a 1 0];
-elseif size(a,2) == 2
-    a = [a 0];
-elseif size(a,2) > 3
+
+[nI,nP] = size(a);
+
+if nP == 1
+    a = [a ones(nI,1) zeros(nI,1)];
+elseif nP == 2
+    a = [a zeros(nI,1)];
+elseif nP > 3
     error('Wrong input argument!');
 end;
+
+
+% if size(a,2) == 1
+%     a = [a 1 0];
+% elseif size(a,2) == 2
+%     a = [a 0];
+% elseif size(a,2) > 3
+%     error('Wrong input argument!');
+% end;
 
 res = [];
 for pp = a';

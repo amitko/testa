@@ -35,7 +35,6 @@ elseif nP > 3
     error('Wrong input argument!');
 end;
 
-
 aO = ones(1,size(itemParameters(:,1),1))';
 thO = ones(1,size(abilityValue,2));
  
