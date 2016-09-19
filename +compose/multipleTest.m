@@ -82,6 +82,7 @@ for k = 1:nOfTest
     % number of items in the test
     Ae = [ones(1,numItems), zeros(1,numItems); zeros(1,numItems) , ones(1,numItems) ];
     be = [nOfItems; nOfItems * (nOfTest - k) ];
+   
     
     % === Inequality constraints ====
     A = [];
@@ -144,6 +145,20 @@ for k = 1:nOfTest
         be = [be; size(reqItems,2)];
     end;
 
+    
+    % additional equalities
+    if ~isempty(inP.Results.addEqualitiesLHS)
+        Ae = [Ae; [inP.Results.addEqualitiesLHS zeros(size(inP.Results.addEqualitiesLHS))]];
+        be = [be; inP.Results.addEqualitiesRHS ];
+    end;
+
+    % additional inequalities
+    if ~isempty(inP.Results.addInequalitiesLHS)
+        A = [A; [inP.Results.addInequalitiesLHS zeros( size(inP.Results.addInequalitiesLHS))]];
+        b = [b; inP.Results.addInequalitiesRHS * 2];
+    end;
+
+    
 
     % ===== Optimizing =======
     %x = intlinprog(f,IntCon,A,b,Ae,be,lb,ub);
