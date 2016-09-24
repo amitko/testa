@@ -60,6 +60,7 @@ ub = ones(numItems * 2,1);
 IntCon = 1:numItems;
 
 itemInf = expected.ItemInformation(itemParams,inP.Results.abilityScaleValues);
+itemInf(isfinite(itemInf) == 0) = 0;
 
 res = [];
 excludedItems = [];
@@ -163,7 +164,7 @@ for k = 1:nOfTest
     % ===== Optimizing =======
     %x = intlinprog(f,IntCon,A,b,Ae,be,lb,ub);
     
-    inCurrentTest = compose.singleTest(nOfItems + nOfItems * (nOfTest - k), [itemParams; itemParams], ...
+    inCurrentTest = assembly.singleTest(nOfItems + nOfItems * (nOfTest - k), [itemParams; itemParams], ...
                                     'abilityScaleValues', inP.Results.abilityScaleValues,...
                                     'targetInfFunctionValuesDN',[],...
                                     'addEqualitiesLHS',Ae,...

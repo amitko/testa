@@ -16,5 +16,10 @@ function res=TestInformation(a,th)
 res = 0;
 
 for it = a'
-    res = res + expected.ItemInformation(it',th);
+    info = expected.ItemInformation(it',th);
+    if isfinite(info)
+        res = res + info;
+    else
+        warning(['Item parameters are ' num2str(it') ', so the Item information is not finite']);
+    end;
 end;
