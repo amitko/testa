@@ -17,3 +17,7 @@ if strcmp(type,'perc')
         res(k,:) = round((length( dScore(dScore<dScore(k) ) )+0.5)/length(dScore)*100);
     end;
 end;
+
+if strcmp(type,'range')
+    res = dScore * 100;
+end;
