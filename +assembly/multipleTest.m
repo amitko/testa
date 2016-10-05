@@ -90,8 +90,9 @@ for k = 1:nOfTest
     b = [];
     
     % No item overlap
-    A = [zeros(numItems) eye(numItems)];
-    b = ones(numItems,1) .* (nOfItems + 1);
+    A = [eye(numItems) eye(numItems)];
+    b = ones(numItems,1);
+    
     
     
     % greater than the target TIF
@@ -106,12 +107,12 @@ for k = 1:nOfTest
         A = [
             A; ...
             -itemInf' zeros(size(itemInf'));...
-%            zeros(size(itemInf')) -itemInf';...
+%            zeros(size(itemInf')) -itemInf';... % ?????
             ];
         b = [
             b; ...
             -inP.Results.targetInfFunctionValuesDN'; ...
-%            -inP.Results.targetInfFunctionValuesDN' .* shadowTestScale ...
+%            -inP.Results.targetInfFunctionValuesDN' * shadowTestScale; ... % ????
             ];
     end;
 
@@ -120,12 +121,12 @@ for k = 1:nOfTest
         A = [
             A;...
             itemInf' zeros(size(itemInf'));...
- %           zeros(size(itemInf')) itemInf';...
+%            zeros(size(itemInf')) itemInf';... % ?????
             ];
         b = [
             b;...
             inP.Results.targetInfFunctionValuesUP';...
- %           inP.Results.targetInfFunctionValuesUP' .* shadowTestScale ...
+%            inP.Results.targetInfFunctionValuesUP' * shadowTestScale; ... % ????
             ];
     end;
     
@@ -163,7 +164,6 @@ for k = 1:nOfTest
 
     % ===== Optimizing =======
     %x = intlinprog(f,IntCon,A,b,Ae,be,lb,ub);
-    
     inCurrentTest = assembly.singleTest(nOfItems + nOfItems * (nOfTest - k), [itemParams; itemParams], ...
                                     'abilityScaleValues', inP.Results.abilityScaleValues,...
                                     'targetInfFunctionValuesDN',[],...
@@ -173,7 +173,7 @@ for k = 1:nOfTest
                                     'addInequalitiesRHS',b,...
                                     'targetFunction',f...
                                     );
-    
+             
     res = [res inCurrentTest(1:nOfItems)];
     
     excludedItems = [excludedItems; inCurrentTest(1:nOfItems)];

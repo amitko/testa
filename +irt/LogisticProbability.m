@@ -37,7 +37,7 @@ end;
 
 aO = ones(1,size(itemParameters(:,1),1))';
 thO = ones(1,size(abilityValue,2));
- 
+
 res = (itemParameters(:,3) * thO) + ( 1 - itemParameters(:,3) * thO) ./ (1 + exp( d .* (itemParameters(:,2) * thO) .* ( itemParameters(:,1) * thO - aO * abilityValue ) ));
 
 

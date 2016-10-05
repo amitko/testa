@@ -136,11 +136,11 @@ if ~isempty(inP.Results.addInequalitiesLHS)
 end;
 
 % ===== Optimizing =======
-options = optimoptions('intlinprog','LPMaxIter',10000);
+options = optimoptions('intlinprog','MaxNodes',numItems * 2);
 x = intlinprog(f,IntCon,A,b,Ae,be,lb,ub,options);
 
 if abs(sum(x) - nOfItems) > 1
-    error(['Can not find a required set of items! Review the restrictions! ' num2str(sum(x)) ' of ' num2str(nOfItems) ' items found!!!']);
+    error('singleTest:NoItems',['Can not find a required set of items! Review the restrictions! ' num2str(sum(x)) ' of ' num2str(nOfItems) ' items found!!!']);
 end;
 
 res = find(x > 0);

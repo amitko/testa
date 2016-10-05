@@ -5,7 +5,7 @@ if nargin < 3
 end;
 
 if strcmp(type,'simple')
-    res = round(100*dScore ./ dScoreMax);
+    res = round((dScore ./ dScoreMax) * 100);
 end;
 
 if strcmp(type,'norm')
@@ -19,5 +19,5 @@ if strcmp(type,'perc')
 end;
 
 if strcmp(type,'range')
-    res = dScore * 100;
+    res = round(dScore * 100);
 end;
