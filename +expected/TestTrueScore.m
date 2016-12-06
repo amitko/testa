@@ -1,5 +1,5 @@
 function res = TestTrueScore(params,th)
-% function res = expected.TestTrueScore(th, params)
+% function res = expected.TestTrueScore(params,th)
 % Returns a the test scores for the test
 % with given set item parameters for the 
 % given ability values
