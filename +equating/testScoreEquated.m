@@ -1,4 +1,4 @@
-function res = testScoreEquated(testScore, Equating)
+function res = testScoreEquated(testScore, Equating,type)
 % res = testScoreEquated(testScore, Equating)
 % testScore - culumn with testScores
 % Equating - result from equating.testScoreEquating
@@ -10,6 +10,15 @@ function res = testScoreEquated(testScore, Equating)
 
 res = [];
 
+if nargin < 3
+    type = '';
+end;
+
 for k=1:size(testScore,1)
-    res(end+1,:)= round(Equating(Equating(:,1) == testScore(k) ,3));
+    
+    if strcmp(type,'limit')
+        res(end+1,:) = min(round(Equating(Equating(:,1) == testScore(k) ,3)), max(Equating(:,1)) );
+    else
+        res(end+1,:) = round(Equating(Equating(:,1) == testScore(k) ,3));
+    end;
 end
