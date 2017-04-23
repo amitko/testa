@@ -46,13 +46,17 @@ leg = {};
 for p = item_performance'
 
     y = p';
-    if opt.colour == 1
-        plot(th,y,[c(c_cnt) t(t_cnt) lt{l_cnt}],'LineWidth',1.5);
-    elseif opt.colour == 2
-        plot(th,y,[ 'k' t(t_cnt) lt{l_cnt} ] ,'LineWidth',1.5);
-        c_cnt = 7;
+    if isfield(opt,'LegendStyle')
+            plot(th,y,opt.LegendStyle{m,2},'LineWidth',1.5);
     else
-        plot(th,y);
+        if opt.colour == 1
+            plot(th,y,[c(c_cnt) t(t_cnt) lt{l_cnt}],'LineWidth',1.5);
+        elseif opt.colour == 2
+            plot(th,y,[ 'k' t(t_cnt) lt{l_cnt} ] ,'LineWidth',1.5);
+            c_cnt = 7;
+        else
+            plot(th,y);
+        end;
     end;
     
     if c(c_cnt) == 'k'
@@ -66,18 +70,21 @@ for p = item_performance'
     c_cnt = mod(c_cnt, 7) + 1;
     l_cnt = mod(l_cnt, 4) + 1;
 
-    if isempty( opt.legend_values{m} )
-        leg{m} = num2str(m);
+    if isfield(opt,'LegendStyle')
+        leg{m} = opt.LegendStyle{m,1};
     else
-        leg{m} = opt.legend_values{m};
+        if isempty( opt.legend_values{m} )
+            leg{m} = num2str(m);
+        else
+            leg{m} = opt.legend_values{m};
+        end;
     end;
-    
     m = m + 1;
 end;
 hold off;
 
 
-if opt.legend == 1
+if opt.legend == 1 || isfield(opt,'LegendStyle')
     legend(leg,'Location','Best'); 
 elseif opt.legend == 2
         c1 = 1;
