@@ -1,4 +1,4 @@
-function [estimatedDeltas, estimatedSE, sampleDeltas] = estimateItemDeltaBootstrap(itemResponse,options)
+function [estimatedDeltas, estimatedSE, sampleDeltas, allEstimates] = estimateItemDeltaBootstrap(itemResponse,options)
 
 if nargin < 2
     options = scoring.Options();
@@ -24,6 +24,8 @@ close(h);
 
 estimatedDeltas = [];
 estimatedSE = std(sampleDeltas)';
+
+allEstimates = [min(sampleDeltas)' mean(sampleDeltas)' mode(sampleDeltas)' median(sampleDeltas)' max(sampleDeltas)'];
 
 if strcmp(options.estTypeForBootstrapping,'mean')
     estimatedDeltas = mean(sampleDeltas)';
