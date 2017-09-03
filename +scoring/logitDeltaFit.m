@@ -15,15 +15,14 @@ for y = observedLogitDelta
     ft_ = fittype('U-(1-G)/(1+(x/B)^A)',...
          'dependent',{'y'},'independent',{'x'},...
          'coefficients',{'A', 'B', 'G', 'U'});
+     
      [cf G] = fit(x,y,ft_,fo_);
+     
      g.parameters = cf;
      g.fit = G;
      GF = [GF, {g} ];
      params = [params; [cf.A cf.B cf.G]];
      ci = confint(cf);
      CI = [CI; [ci(1,1) ci(2,1) ci(1,2) ci(2,2) ci(1,3) ci(2,3)]];
-     hold on;
-     plot(cf);
-     plot(x,y);
-     hold off;
+     
 end;

@@ -1,6 +1,8 @@
-function [res,dScale] = observedLogitDelta(ItemResponse, Dscore)
+function [res,dScale] = observedLogitDelta(ItemResponse, Dscore,dScale)
 
-dScale = [0:0.05:1]';
+if nargin <= 2
+    dScale = [0:0.05:1]';
+end
 
 res = [];
 
