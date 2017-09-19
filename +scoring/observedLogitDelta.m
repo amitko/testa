@@ -12,7 +12,12 @@ for d = dScale'
     I = find(Dscore <= d);
     R = [];
     for Item = ItemResponse
-        R = [R sum(Item(I))/size(I,1)];
+        prop = sum(Item(I))/size(I,1);
+        if isnan(prop)
+            R = [R 0];
+        else    
+            R = [R prop];
+        end;
     end;
     res = [res; R];
 end;

@@ -11,7 +11,7 @@ function res=dScore(itemDeltas,response,t)
 
 
 if nargin == 2
-    t = 'total';
+    t = 'relative_to_d';
 end;
 
 D = response * itemDeltas;
