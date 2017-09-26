@@ -1,11 +1,13 @@
-function [params, CI, GF] = logitDeltaPlot(GF,observedLogitDelta,dScale)
+function h = logitDeltaPlot(GF,observedLogitDelta,dScale)
 
 % GF output from logitDeltaFit
 
-figure;
 hold on;
-plot(GF.parameters);
-plot(dScale,observedLogitDelta);
-legend('Fitted','Observed')
+h = plot(GF.parameters,'k-');
+set(h, 'LineWidth',2)
+plot(dScale,observedLogitDelta,'k-.', 'LineWidth',2);
+xlabel('D-score');
+ylabel('Probability for correct response');
+legend('Fitted','Observed','Location','northwest');
 
 hold off;
