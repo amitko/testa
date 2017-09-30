@@ -1,7 +1,8 @@
-function [res,dScale] = observedLogitDelta(ItemResponse, Dscore,dScale)
+function [res,dScale] = observedLogitDelta(ItemResponse, Dscore,o)
 
-if nargin <= 2
-    dScale = [0:0.05:1]';
+
+if nargin < 3 || isempty(o)
+    o = scoring.Options;
 end
 
 res = [];
@@ -9,7 +10,7 @@ res = [];
 N = size(ItemResponse,1);
 
 d_prev = 0;
-for d = dScale'
+for d = o.dScale'
     I = find(Dscore <= d & Dscore > d_prev);
     R = [];
     for Item = ItemResponse

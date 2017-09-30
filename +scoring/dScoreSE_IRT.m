@@ -1,4 +1,4 @@
-function res = dScoreSE(parameters, theta)
+function res = dScoreSE_IRT(parameters, theta)
 
 % Returns the so called d-Score SE for a person
 % with a given a given ability theta (on a logit scale)
@@ -12,4 +12,3 @@ deltas = (ones(size(expected_score)) - expected_score)';
 
 itemVar = irt.ItemVariance(parameters,theta);
 res = sqrt( deltas.^2 * itemVar);
-

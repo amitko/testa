@@ -1,32 +1,20 @@
-function [params, CI, GF, Results] = logitDeltaFit(itemData,dScores,dScale,StartingPoint,model,type)
+function [params, CI, GF, Results] = logitDeltaFit(itemData,dScores,o);
 
-if nargin < 3 || isempty(dScale)
-    dScale = [0:0.05:1]';
+if nargin < 3 || isempty(0) 
+    o = scoring.Options;
 end;
 
-if nargin < 4 || isempty(StartingPoint)
-    StartingPoint = [1 0.5 0.1];
-end;
+Results.dScale = o.dScale;
+Results.StartingPoint = o.StartingPoint;
+Results.Model = o.model;
+Results.type = o.type;
 
-if nargin < 5 || isempty(model) || model > 4 || model < 2
-    model = 4;
-end;    
+Results.observedLogitDelta = scoring.observedLogitDelta(itemData,dScores,o);
 
-if nargin < 6 || isempty(type)
-    type = 'prop';
-end;
-
-Results.dScale = dScale;
-Results.StartingPoint = StartingPoint;
-Results.Model = model;
-results.type = type;
-
-Results.observedLogitDelta = scoring.observedLogitDelta(itemData,dScores,dScale);
-
-if strcmp(type,'prop')
-    x = dScale;
+if strcmp(o.type,'prop')
+    x = o.dScale;
     to_fit = Results.observedLogitDelta;
-elseif strcmp(type,'raw')
+elseif strcmp(o.type,'raw')
     x = dScores;
     to_fit = itemData;
 else
@@ -38,28 +26,20 @@ end;
 GF = {};
 params = [];
 CI = [];
-
-Models = { '', ...
-           '1-(1/(1+(x/B)^A))',...
-           '1-((1-G)/(1+(x/B)^A))',...
-           'U-((1-G)/(1+(x/B)^A))'
-           };
-Model_coefficients = {'A', 'B', 'G', 'U'};       
-
 for y = to_fit
 
-    Model_lb = [0.01 0.01 0.01 max(y) - 0.1];       
-    Model_ub = [5    0.99 0.35 max(y) + 0.1];       
-    start_point = [StartingPoint y(end)];
+    Model_lb = [o.param_lb max(y) - 0.1];       
+    Model_ub = [o.param_ub max(y) + 0.1];       
+    start_point = [o.StartingPoint y(end)];
     
     fo_ = fitoptions('method','NonlinearLeastSquares',...
-                     'Lower',Model_lb(1:model),...
-                     'Upper',Model_ub(1:model));
-    set(fo_,'Startpoint',start_point(1:model));
+                     'Lower',Model_lb(1:o.model),...
+                     'Upper',Model_ub(1:o.model));
+    set(fo_,'Startpoint',start_point(1:o.model));
 
-    ft_ = fittype(Models{model},...
+    ft_ = fittype(o.Models{o.model},...
          'dependent',{'y'},'independent',{'x'},...
-         'coefficients',Model_coefficients(1:model));
+         'coefficients',o.Model_coefficients(1:o.model));
      
      [cf, G] = fit(x,y,ft_,fo_);
      
@@ -69,13 +49,13 @@ for y = to_fit
      
      ci = confint(cf);
     
-    if model == 2
+    if o.model == 2
         params = [params; [cf.A cf.B]];
          CI = [CI; [ci(1,1) ci(2,1) ci(1,2) ci(2,2)]];
-    elseif model == 3
+    elseif o.model == 3
          params = [params; [cf.A cf.B cf.G]];
      CI = [CI; [ci(1,1) ci(2,1) ci(1,2) ci(2,2) ci(1,3) ci(2,3)]];
-    elseif model == 4
+    elseif o.model == 4
          params = [params; [cf.A cf.B cf.G cf.U]];
      CI = [CI; [ci(1,1) ci(2,1) ci(1,2) ci(2,2) ci(1,3) ci(2,3), ci(1,4 ) ci(2,4)]];
     end;
