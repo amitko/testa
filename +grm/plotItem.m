@@ -29,7 +29,7 @@ function res = plotItem(itemDifficultyLevels,o)
 % Dimitar Atanasov
 % datanasov@ir-statistics.net
 
-if nargin < 3 || isempty(o)
+if nargin < 2 || isempty(o)
     o = irT.grm.Options();
 end;
 

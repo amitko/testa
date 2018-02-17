@@ -31,8 +31,6 @@ function thresholdValues = estimate(response, score, o)
     
 function  [thresholdValue] = grm_item_estimate(th, item, thresholdValuesStart, score)
 %% GRM for a given item
-
-
     maxGrade = max(item);
     
     lb = th(1);
