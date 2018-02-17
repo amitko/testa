@@ -8,13 +8,13 @@ function res=ProdMomentCorrelation(item_response)
 %   item_response - NxM matrix of dichotomous answers (0 or 1)
 %                   from N subjects aver a set of M items
 %
-% Output: 
+% Output:
 %   res - Matrix MxM of coefficients
 
 % Dimitar Atanasov, 2014
 % datanasov@ir-statistics.net
 
-p = cls.ItemDifficulty( item_response );
+p = irT.cls.ItemDifficulty( item_response );
 res=[];
 for k = 1:size(p,2)
     for l = 1:size(p,2)

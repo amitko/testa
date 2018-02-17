@@ -1,4 +1,4 @@
-function res = itemPerformance(itemDifficultyLevels,itemDiscrimination,th)
+function res = itemPerformance(itemDifficultyLevels,o)
 %Function
 %
 %item_performance(itemDifficultyLevels,itemDiscrimination,th)
@@ -17,11 +17,17 @@ function res = itemPerformance(itemDifficultyLevels,itemDiscrimination,th)
 % Dimitar Atanasov
 % datanasov@ir-statistics.net
 
+if nargin < 2 || isempty(o)
+    o = irT.grm.Options();
+end;
+
+
+th = o.LatentTraitValues;
 
 res = [];
 
 for grade = 1:size(itemDifficultyLevels,2)
     for ability = 1:size(th,2)
-        res(grade,ability) = irT.grm.logisticProbability(itemDifficultyLevels(grade), itemDiscrimination,th(ability));
+        res(grade,ability) = irT.grm.logisticProbability(itemDifficultyLevels(grade),th(ability),o);
     end;
 end;

@@ -1,13 +1,13 @@
 function parsQ = AttributeParametersEstimate(pars, Q, o)
 %Function lsdm.AttributeParametersEstimate(pars, Q, o)
-%   Estimates the IRT paramethers of a given set of cognitive 
+%   Estimates the IRT paramethers of a given set of cognitive
 %   attributes over a set of IRT item parameters.
 %
-%   Input: 
+%   Input:
 %       par - the values of the item parameters
 %           each row represents one item
 %           [difficulty dicriminative guest]
-%       Q   - matrix of indicators that item j 
+%       Q   - matrix of indicators that item j
 %           requires attribute k  ( Q(j,k) = 1 )
 %       o   - lsdm.Options
 %
@@ -19,26 +19,23 @@ function parsQ = AttributeParametersEstimate(pars, Q, o)
 
 
 if nargin == 2
-    o = lsdm.Options;
+    o = irT.lsdm.Options;
 end;
 
 th = o.IRT.LatentTraitValues;
 
-%for k = 1:size(Q,1)
-%   p(k,:) = irt.LogisticProbability(pars(k,:),th);
-%end;
-p = irt.LogisticProbability(pars,th);
+p = irT.irt.LogisticProbability(pars,th);
 
-attr_prob = lsdm.AttributePerformance(p,Q,o);
+attr_prob = irT.lsdm.AttributePerformance(p,Q,o);
 
 parsQ = [];
 for k = 1:size(attr_prob,1)
-   parsQ(k,:) = irt.Fit(th, attr_prob(k,:) );
+   parsQ(k,:) = irT.irt.Fit(th, attr_prob(k,:) );
 end;
 
 if strcmp(o.PlotCC,'Yes')
     opt.legend = 1;
 	opt.colour  = 1;
-	
-	irt_plot_item(parsQ,th,opt)
+
+	irT.irt.PlotItem(parsQ,th,opt)
 end;

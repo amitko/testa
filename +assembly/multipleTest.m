@@ -3,7 +3,6 @@ function res = multipleTest(nOfTest, nOfItems, itemParams, varargin)
 % Required items can be alligned with 0
 
 % =====  parse the inputs ====
-
 inP = inputParser;
 inP.KeepUnmatched = true;
 
@@ -51,7 +50,6 @@ if ~isempty(inP.Results.requiredItems) && (size(inP.Results.requiredItems,1) ~= 
 end;
 
 % ====== Init Values =====
-
 numItems = size(inP.Results.itemParams,1);
 
 lb = zeros(numItems * 2,1);

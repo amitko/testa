@@ -4,7 +4,7 @@ function [A,B,S,SA] = scaleTestSequence(testSequence, commonItems)
 %
 % The first element in test sequence should be
 % the base test Y
-% Y<-X1<-X2<-X3 .... 
+% Y<-X1<-X2<-X3 ....
 %
 % testSequence is a cellarray of target tests
 % commonItems is a cell array of common item sets
@@ -23,7 +23,7 @@ S = [];
 SA = [];
 
 for k = 1:length(testSequence)-1
-    [a,b] = equating.scaleItemParameters(testSequence{k},testSequence{k+1},commonItems{k});
+    [a,b] = irT.equating.scaleItemParameters(testSequence{k},testSequence{k+1},commonItems{k});
     S(k,:) = [a b];
     As = [As a];
     A = A*a;

@@ -2,8 +2,8 @@ function res = testScoreEquating(itemParameters1,itemParameters2,th)
 % itemParameters are for Test score 1
 
 res = [];
-T1 = expected.TestTrueScore(itemParameters1,th);
-T2 = expected.TestTrueScore(itemParameters2,th);
+T1 = irT.expected.TestTrueScore(itemParameters1,th);
+T2 = irT.expected.TestTrueScore(itemParameters2,th);
 
 c1 = sum(itemParameters1(:,3));
 c2 = sum(itemParameters2(:,3));
@@ -18,15 +18,15 @@ for k = floor(c2) + 1  : floor(min(T2))
     res = [res; [k NaN m*k + b]];
 end;
 
-for ts = floor(min(T2)) + 1 : floor(max(T2)) 
+for ts = floor(min(T2)) + 1 : floor(max(T2))
     I1 = max(find( T2 < ts ));
     I2 = min(find( T2 > ts ));
-    
+
     [Srt, Sri] = sort([ abs(mean(th(I1)) - ts) , abs(mean(th(I2)) - ts)]);
-    
+
     val = [mean(th(I1)), mean(th(I2))];
-    
-    res = [res; [ts val(Sri(1)) expected.TestTrueScore( itemParameters1, val(Sri(1)) ) ] ];
+
+    res = [res; [ts val(Sri(1)) irT.expected.TestTrueScore( itemParameters1, val(Sri(1)) ) ] ];
 end;
 
 [m, b] = str_line(floor(max(T2)), floor(max(T1)), size(itemParameters2), size(itemParameters2));

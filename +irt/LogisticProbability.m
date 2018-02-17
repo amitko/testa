@@ -25,7 +25,7 @@ if nargin < 3
 end;
 
 
-[nI,nP] = size(itemParameters);
+[nI,nP] = size(itemParameters)
 
 if nP == 1
     itemParameters = [itemParameters ones(nI,1) zeros(nI,1)];

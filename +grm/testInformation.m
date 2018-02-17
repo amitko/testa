@@ -1,23 +1,11 @@
-function res = testInformation(itemsThresholds, itemsDiscrimination, th)
-%Function
-%
-%grm_test_information(itemsThresholds, itemsDiscrimination, th)
-%
-%Calculates the test information function under the GRM.
-%
-% INPUT:
-%         itemThresholds - matrix of values of the difficulty parameter
-%                          for item grades. Each row represents an item.
-%   itemDiscrimination   - Value of the item discrimination. Same for all
-%                          grades.
-%         th             - ability value on logit scale
-%                           
+function res = testInformation(itemsThresholds, o)
 
-% i-Research, 2012
-% Dimitar Atanasov
-% datanasov@ir-statistics.net
+if nargin < 2 || isempty(o)
+    o = irT.grm.Options();
+end;
+
 
 res = 0;
 for k = 1:size(itemsThresholds,1)
-    res = res + irT.grm.itemInformation( itemsThresholds(k,:), itemsDiscrimination, th);
+    res = res + irT.grm.itemInformation( itemsThresholds(k,:), o.itemDiscrimination, o.LatentTraitValues);
 end;

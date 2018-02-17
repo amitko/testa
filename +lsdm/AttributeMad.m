@@ -1,16 +1,16 @@
 function res = AttributeMad(item_performance, attribute_performance, Q, o)
 % Function lsdm.AttributeMad(item_performance, attribute_performance, Q, o)
-%   Calculates Mean Absolute Difference (MAD) between 
+%   Calculates Mean Absolute Difference (MAD) between
 %   true item performance and its attribute recovery.
 %
 % Input:
 %   item_performance - n by m matrix of probabilities p(j,k)
-%                       for correct answer  on item j from 
+%                       for correct answer  on item j from
 %                       person with ability group k.
 %   attribute_performance - p by m matrix of probabilities P(j,k)
-%                       for possesing attribute j from person with 
+%                       for possesing attribute j from person with
 %                       ability group k.
-%   Q                - matrix of indicators that item j 
+%   Q                - matrix of indicators that item j
 %                       requires attribute k  ( Q(j,k) = 1 ).
 %   o                - lsdm.Options, uses LSDMModel
 %
@@ -26,19 +26,19 @@ function res = AttributeMad(item_performance, attribute_performance, Q, o)
 [nQ,mQ] = size(Q);
 
 if nargin < 4
-    o = lsdm.Options;
+    o = irT.lsdm.Options;
 end;
 
 if n ~= nQ || m ~= mA
-    error('Dimension of item performance, attribute performance and Q should agree');    
+    error('Dimension of item performance, attribute performance and Q should agree');
 end;
 
-if nA ~= mQ 
-    error('Dimension of attribute performance and Q should agree');    
+if nA ~= mQ
+    error('Dimension of attribute performance and Q should agree');
 end;
 
 
-pe = lsdm.ItemRecovery( attribute_performance, Q, o);
+pe = irT.lsdm.ItemRecovery( attribute_performance, Q, o);
 
 err = abs( item_performance - pe);
 res = mean(err');

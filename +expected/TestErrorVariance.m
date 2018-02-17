@@ -5,7 +5,7 @@ function res=TestErrorVariance(par)
 %	paramaters of the test items
 %
 %   INPUT:
-%       par - parameters of the items with rows 
+%       par - parameters of the items with rows
 %           [difficulty dicriminative gest]
 
 % Dimitar Atanasov 2014
@@ -13,6 +13,6 @@ function res=TestErrorVariance(par)
 
 res = 0;
 for p = par'
-    res = res + expected.ItemErrorVariance(p');
+    res = res + irT.expected.ItemErrorVariance(p');
 end;
 

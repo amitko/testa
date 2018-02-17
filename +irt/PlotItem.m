@@ -20,6 +20,6 @@ end;
 
 th = o.LatentTraitValues;
 
-item_performance = irt.LogisticProbability(par,th);
+item_performance = irT.irt.LogisticProbability(par,th);
 
-res = irt.PlotItemPerformance(item_performance,o);
+res = irT.irt.PlotItemPerformance(item_performance,o);

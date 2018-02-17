@@ -26,7 +26,7 @@ elseif nP > 3
 end;
 
 if nargin < 3
-    o = irt.Options;
+    o = irT.irt.Options;
 end;
 
 d = o.D;
@@ -36,7 +36,7 @@ res = [];
 aO = ones(1,size(itemParameters(:,1),1))';
 thO = ones(1,size(abilityValue,2));
 
-p = irt.LogisticProbability(itemParameters,abilityValue,d);
+p = irT.irt.LogisticProbability(itemParameters,abilityValue,d);
     
 p(p > 1 - eps) = 1 - eps;
 

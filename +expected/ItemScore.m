@@ -34,20 +34,12 @@ elseif nP > 3
 end;
 
 
-% if size(a,2) == 1
-%     a = [a 1 0];
-% elseif size(a,2) == 2
-%     a = [a 0];
-% elseif size(a,2) > 3
-%     error('Wrong input argument!');
-% end;
-
 res = [];
 for pp = a';
     pp = pp';
     X = (pp(1).*pp(2))./sqrt(2.*( 1 + pp(2).^2));
 
-    if strcmp(type,'erf')    
+    if strcmp(type,'erf')
         p = ( 1 - erf(X) )./2;
     elseif strcmp(type,'appr')
         erfX = 1 - (1 + 0.278393*abs(X) + 0.230389*abs(X).^2 + 0.000972*abs(X)^.3 + 0.078108*abs(X).^4)^-4;

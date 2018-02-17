@@ -1,7 +1,7 @@
 function res = TestTrueScore(params,th)
 % function res = expected.TestTrueScore(params,th)
 % Returns a the test scores for the test
-% with given set item parameters for the 
+% with given set item parameters for the
 % given ability values
 %
 % INPUT:
@@ -12,5 +12,5 @@ function res = TestTrueScore(params,th)
 % Dimitar Atanasov (2014)
 % datanasov@ir-statistics.net
 
-res = sum(irt.LogisticProbability(params,th));
+res = sum(irT.irt.LogisticProbability(params,th));
 

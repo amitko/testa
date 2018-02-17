@@ -2,7 +2,7 @@ function ViewRecovery(item_recovery,item_performance,o)
 % Function lsdm.ViewRecovery(item_recovery,item_performance,o)
 % Plots the ICC and Item Recovery Curve
 %
-%   Input: 
+%   Input:
 %       item_recovery    - vector of LSDM item recovery
 %       item_performance - vector of item performance
 %       o                - lsdm.Options: use LatentTraitInterval and LSDMShowMad
@@ -11,7 +11,7 @@ function ViewRecovery(item_recovery,item_performance,o)
 % datanasov@ir-statistics.net
 
 if nargin < 3
-    o = lsdm.Options;
+    o = irT.lsdm.Options;
 end;
 
 if size(item_recovery) ~= size(item_performance)

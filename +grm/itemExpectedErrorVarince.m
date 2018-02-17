@@ -1,4 +1,11 @@
-function res = itemExpectedErrorVarince(itemThresholds, itemDiscrimination)
+function res = itemExpectedErrorVarince(itemThresholds, o)
+
+if nargin < 2 || isempty(o)
+    o = irT.grm.Options();
+end;
+
+itemDiscrimination = o.itemDiscrimination;
+
 
 r_ = [];
 

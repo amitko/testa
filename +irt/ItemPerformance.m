@@ -11,14 +11,14 @@ function res=ItemPerformance(item_parameters,th,o)
 %
 %   Output:
 %       res = p by m matrix of probabilities P(j,k)
-%               for correct answer on item j from 
+%               for correct answer on item j from
 %               person with ability group k.
-    
+
 %  Dimitar Atanasov, 2014
 %  datanasov@ir-statistics.net
 
 if nargin < 3 || isempty(o)
-    o = irt.Options;
+    o = irT.irt.Options;
 end;
 
 res = [];
@@ -28,9 +28,9 @@ end;
 
 
 %for k = 1:size(item_parameters,1)
-%   res(k,:) = irt.LogisticProbability(item_parameters(k,:),th);
+%   res(k,:) = irT.irt.LogisticProbability(item_parameters(k,:),th);
 %end;
 
 warning('ItemPerformance: Out of date. Better to use irt.LogisticProbability directly');
-res = irt.LogisticProbability(item_parameters,th);
+res = irT.irt.LogisticProbability(item_parameters,th);
 

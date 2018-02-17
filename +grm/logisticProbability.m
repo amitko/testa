@@ -1,4 +1,4 @@
-function res = logistic_probability(itemDifficultyLevels,itemDiscrimination,th,o)
+function res = logisticProbability(itemDifficultyLevels,th,o)
 %Function
 %logistic_probability(itemDifficultyLevels,itemDiscrimination,th,d,type)
 %Calculates the logistic probability under the GRM.
@@ -14,11 +14,11 @@ function res = logistic_probability(itemDifficultyLevels,itemDiscrimination,th,o
 %                  type  - thresholds (default value) ISRF / grades IGRF.
 %                           
 
-if nargin < 3
+if nargin < 2
     error('Item parameters and ability levels required');
 end;
 
-if nargin < 4 | isempty(o)
+if nargin < 3 | isempty(o)
     o = irT.grm.Options();
 end;
 
@@ -28,7 +28,7 @@ d = o.D;
 res = [];
 
 for threshlold = itemDifficultyLevels
-    val = exp(d * itemDiscrimination *(th - threshlold) )./( 1 + exp(d * itemDiscrimination *(th - threshlold) ));
+    val = exp(d * o.itemDiscrimination *(th - threshlold) )./( 1 + exp(d * o.itemDiscrimination *(th - threshlold) ));
     res = [res val];
 end;
 

@@ -1,6 +1,6 @@
-function res = testTrueScore(itemThresholds, itemDiscrimination, ability, scale_values)
+function res = testTrueScore(itemThresholds, scale_values, o)
 
-if nargin == 3 || isempty(scale_values)
+if nargin < 2 || isempty(scale_values)
     scale_values = 1;
     for k = 1:size(itemThresholds,1)
         n_ = size(itemThresholds(k,:),2);
@@ -12,8 +12,15 @@ if nargin == 3 || isempty(scale_values)
     end
 end;    
 
+if nargin < 3 || isempty(o)
+    o = irT.grm.Options();
+end
+
+ability = o.LatentTraitValues;
 
 res = zeros(1,size(ability,2));
 for k = 1:size(itemThresholds,1)
-    res = res + irT.grm.itemTrueScore(itemThresholds(k,:), itemDiscrimination, ability, scale_values(k,:));
+    res = res + irT.grm.itemTrueScore(itemThresholds(k,:), ability, scale_values(k,:), o)';
 end;
+
+

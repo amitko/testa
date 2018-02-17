@@ -2,7 +2,7 @@ function [res, at_least] = Attr4CD(attr_performance)
 % Function lsdm.Attr4CD(attr_performance)
 %
 % Calculates the probabilities for performing on k
-% cognitive attributes.  
+% cognitive attributes.
 %   Input:
 %       attr_performance - Attribute performance for the set
 %                          of ability levels
@@ -23,7 +23,7 @@ for t = 1 : size( attr_performance,2 ) % for each ability level
     r = [];
     s = -sort(-attr_performance(:,t));
     for p = 0:size( attr_performance,1 ) % for each  'p'
-        r = [r tools.comb_probability( attr_performance(:,t)',p) ];
+        r = [r irT.tools.comb_probability( attr_performance(:,t)',p) ];
     end;
     res = [res r'];
 end;

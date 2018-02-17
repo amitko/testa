@@ -1,4 +1,4 @@
-function res = plotItem(itemDifficultyLevels,itemDiscrimination,th,opt)
+function res = plotItem(itemDifficultyLevels,o)
 %Function
 %
 %plot_item(itemDifficultyLevels,itemDiscrimination,th,opt)
@@ -29,14 +29,20 @@ function res = plotItem(itemDifficultyLevels,itemDiscrimination,th,opt)
 % Dimitar Atanasov
 % datanasov@ir-statistics.net
 
-
-if nargin < 4
-    opt.legend = 0;
-    opt.colour  = 0;
+if nargin < 3 || isempty(o)
+    o = irT.grm.Options();
 end;
 
+itemDiscrimination = o.itemDiscrimination;
 
-item_performance = irT.grm.itemPerformance(itemDifficultyLevels,itemDiscrimination,th);
+opt = irT.irt.Options();
 
-res = figure;
-irT.irt.plot_item(item_performance,th,opt);
+opt.legend = 0;
+opt.colour  = 0;
+
+opt.LatentTraitValues = o.LatentTraitValues;
+
+
+item_performance = irT.grm.itemPerformance(itemDifficultyLevels,o);
+
+irT.irt.PlotItemPerformance(item_performance,opt);

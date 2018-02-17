@@ -16,7 +16,7 @@ function res=TestInformation(a,th)
 res = 0;
 
 for it = a'
-    info = expected.ItemInformation(it',th);
+    info = irT.expected.ItemInformation(it',th);
     if isfinite(info)
         res = res + info;
     else

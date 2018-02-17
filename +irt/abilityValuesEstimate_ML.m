@@ -4,7 +4,7 @@ function [res] = abilityValuesEstimate_ML(response,params,trait_0,o)
 %   Returns the estimated ability values according the IRT model
 %       for a set of items with given parameters.
 %
-%   INPUT: 
+%   INPUT:
 %       response - observed examinee response
 %                   ( 1 - correct, 0 - incorrect)
 %       par - the values of the estimated parameters
@@ -21,10 +21,10 @@ function [res] = abilityValuesEstimate_ML(response,params,trait_0,o)
 
 
     if nargin < 4
-        o = irt.Options;
+        o = irT.irt.Options;
     end;
 
-   
+
     if size(response,2) ~= size(params,1)
         error('Responses and parameters does not match');
     end;
@@ -39,7 +39,7 @@ function [res] = abilityValuesEstimate_ML(response,params,trait_0,o)
 
 
 
-function [par,se]=latent_value_estimate(item_response, params,trait_0, o )   
+function [par,se]=latent_value_estimate(item_response, params,trait_0, o )
 
    f = @(trait_0)latent_lklh(trait_0,item_response,params,o.D);
    par = fmincon(f, trait_0, [], [], [], [], o.LatentTraitInterval(1), o.LatentTraitInterval(2), [], o.OptimisationOptions);
@@ -48,7 +48,7 @@ function [par,se]=latent_value_estimate(item_response, params,trait_0, o )
 
 function res=latent_lklh(trait,item_response,params,d)
 
-    LP = @(params,trait,d)irt.LogisticProbability(params,trait,d);
+    LP = @(params,trait,d)irT.irt.LogisticProbability(params,trait,d);
     res = 0;
     for k=1:size(params,1)
         p = LP(params(k,:),trait,d);
@@ -60,7 +60,7 @@ function res=latent_lklh(trait,item_response,params,d)
             end;
         end;
         if isnan(res)
-          log(LP(params(k,:),trait,d))  
+          log(LP(params(k,:),trait,d))
           LP(params(k,:),trait,d)
           pause
         end;

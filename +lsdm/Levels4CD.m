@@ -8,7 +8,7 @@ function [res, row] = Levels4CD(cd_values,o)
 %
 %   Inputs:
 %       cd_values - probalistic curves
-%       o         - lsdm.Options, uses LatentTraitInterval and LSDMReachedLevel and LSDMLevels 
+%       o         - lsdm.Options, uses LatentTraitInterval and LSDMReachedLevel and LSDMLevels
 %
 %   Returns:
 %       res  - intersection points
@@ -21,7 +21,7 @@ function [res, row] = Levels4CD(cd_values,o)
 % datanasov@ir-statistics.net
 
 if nargin == 1
-    o = lsdm.Options;
+    o = irT.lsdm.Options;
 end;
 
 th = o.IRT.LatentTraitValues;
@@ -38,8 +38,8 @@ if strcmp(o.LSDMLevels,'No')
             I = find(cd_values(:,k) < cd_values(l,k));
             I1 = find(cd_values(I,k+1) > cd_values(l,k+1));
             if ~isempty(I1)
-                [a1,b1] = tools.find_line_pars([th(k) cd_values(l,k)],[th(k+1), cd_values(l,k+1)]);
-                [a2,b2] = tools.find_line_pars([th(k) cd_values(I(min(I1)),k)],[th(k+1), cd_values(I(min(I1)),k+1)]);
+                [a1,b1] = irT.tools.find_line_pars([th(k) cd_values(l,k)],[th(k+1), cd_values(l,k+1)]);
+                [a2,b2] = irT.tools.find_line_pars([th(k) cd_values(I(min(I1)),k)],[th(k+1), cd_values(I(min(I1)),k+1)]);
                 x = -(( b1 - b2 )./( a1 - a2 ));
                 res(l,I(I1)) = x;
             end;
@@ -54,7 +54,7 @@ elseif strcmp(o.LSDMLevels,'Yes')
         r = min( find( cd_values(l, : ) > o.LSDMReachedLevel ) );
        row(l) = Inf;
        if ~isempty(r)
-        [a,b] = tools.find_line_pars([th(r) cd_values(l,r)],[th(r+1), cd_values(l,r+1)]);
+        [a,b] = irT.tools.find_line_pars([th(r) cd_values(l,r)],[th(r+1), cd_values(l,r+1)]);
         row(l) = -(( b - o.LSDMReachedLevel ) ./ a );
        end;
    end;

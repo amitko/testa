@@ -23,7 +23,7 @@ score = sum(item_response')';
 m = mean(score);
 v = sqrt(var(score));
 
-p = cls.ItemDifficulty( item_response );
+p = irT.cls.ItemDifficulty( item_response );
 
 res = [];
 for k = 1:size(item_response,2)

@@ -40,7 +40,7 @@ for ability = th
     end;
 
     for p = 1:size(pars,1);
-        pr = irt.LogisticProbability( pars(p,:), ability, d);
+        pr = irT.irt.LogisticProbability( pars(p,:), ability, d);
 
         if size(varargin,2) >= 2
             if strcmp(varargin{1},'guess') == 1 && attr(p) == 1

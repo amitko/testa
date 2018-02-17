@@ -7,15 +7,15 @@ function res=Phi(item_response)
 %   item_response - NxM matrix of dichotomous answers (0 or 1)
 %                   from N subjects aver a set of M items
 %
-% Output: 
+% Output:
 %   res - Matrix MxM phi coefficients
 
 % Dimitar Atanasov, 2014
 % datanasov@ir-statistics.net
 
 
-s = cls.ItemVariance( item_response );
-sc = cls.ItemCovariance( item_response );
+s = irT.cls.ItemVariance( item_response );
+sc = irT.cls.ItemCovariance( item_response );
 
 res=[];
 for k = 1:size(s,2)

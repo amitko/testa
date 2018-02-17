@@ -1,11 +1,13 @@
 function option = Options(varargin)
 
-option.thInterval = [0,1]
+option.thInterval = [-3, 3];
 option.thresholdValuesStart = 0;
-options.D = 1.702;
-options.thresholdsType = 'thresholds'; % or 'grades' // in logistic_probability
+option.D = 1.702;
+option.thresholdsType = 'thresholds'; % or 'grades' // in logistic_probability
 
+option.LatentTraitValues = -3:.2:3;
 
+option.itemDiscrimination = 1;
 
 if nargin > 0
 	if mod(nargin,2) ~= 0

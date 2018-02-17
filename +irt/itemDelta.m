@@ -8,5 +8,5 @@ function res = itemDelta(parameters)
 % Dimitar Atanasov, 2016
 % datanasov@ir-statistics.net
 
-expected_score = expected.ItemScore(parameters);
+expected_score = irT.expected.ItemScore(parameters);
 res = ones(size(expected_score)) - expected_score;

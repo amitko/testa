@@ -9,5 +9,5 @@ v1 = var(sum(item_response1'));
 v2 = var(sum(item_response2'));
 v  = var(sum([item_response2 item_response2]'));
 
-res = 1 - ((1 - cls.CrAlpha(item_response1))* v1 + (1 - cls.CrAlpha(item_response2))* v2 ) / v;
- 
+res = 1 - ((1 - irT.cls.CrAlpha(item_response1))* v1 + (1 - irT.cls.CrAlpha(item_response2))* v2 ) / v;
+

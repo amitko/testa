@@ -8,13 +8,13 @@ function res=CrAlpha(item_response)
 %   item_response - NxM matrix of dichotomous answers (0 or 1)
 %                   from N subjects aver a set of M items
 %
-% Output: 
+% Output:
 %   res - Cronbach's alpha coefficient
 
 % Dimitar Atanasov, 2014
 % datanasov@ir-statistics.net
 
-s = cls.ItemVariance( item_response );
+s = irT.cls.ItemVariance( item_response );
 k = size(item_response,2);
 v = var(sum(item_response'));
 

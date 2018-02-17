@@ -4,9 +4,9 @@ function res=PlotItemPerformance(item_performance,o)
 %
 %
 %   INPUT:
-%       item_performance - probamility of correct 
+%       item_performance - probamility of correct
 %               responce from person with agiven ability
-%       o     - irt.Options 
+%       o     - irt.Options
 %
 %   OUTPUT:
 %   res - 1
@@ -15,7 +15,7 @@ function res=PlotItemPerformance(item_performance,o)
 % datanasov@ir-statistics.net
 
 if nargin < 2
-    o= irt.Options;
+    o= irT.irt.Options;
 end;
 
     opt = o.Plot;
@@ -58,15 +58,15 @@ for p = item_performance'
             plot(th,y);
         end;
     end;
-    
+
     if c(c_cnt) == 'k'
         t_cnt = mod(t_cnt , 13) + 1;
     end;
-    
+
     if t_cnt == 13
         l_cnt = mod(l_cnt, 4) + 1;
     end;
-    
+
     c_cnt = mod(c_cnt, 7) + 1;
     l_cnt = mod(l_cnt, 4) + 1;
 
@@ -85,7 +85,7 @@ hold off;
 
 
 if opt.legend == 1 || isfield(opt,'LegendStyle')
-    legend(leg,'Location','Best'); 
+    legend(leg,'Location','Best');
 elseif opt.legend == 2
         c1 = 1;
         c2 = size(item_performance,2)-1;
@@ -104,12 +104,12 @@ elseif opt.legend == 2
                 c2 = 1;
             end;
         end;
-        
+
         t1 = th(c1);
         t2 = th(c2);
         text(t1 + .1, item_performance(k,c1), leg{k} );
         text(t2 + .1, item_performance(k,c2), leg{k} );
-        
+
         ex = [ex t1 + .1];
         ey = [ey item_performance(k,c2)];
     end;

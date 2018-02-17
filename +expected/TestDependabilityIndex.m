@@ -1,14 +1,14 @@
 function res=TestDependabilityIndex(th,par)
 % Function res = expected.TestDependabilityIndex(th,par)
-%   Returns the dependability index of the test for a given set 
+%   Returns the dependability index of the test for a given set
 %   of ability values th over a number of items with IRT parameters
-% 
+%
 %   INPUT:
 %       th  - vector of ability levels
-%       par - parameters of the items with rows 
+%       par - parameters of the items with rows
 %           [difficulty dicriminative gest]
 %
-%   OUPUT: 
+%   OUPUT:
 %       res - vector of dependability indexes
 
 % Dimitar Atanasov 2014
@@ -16,13 +16,13 @@ function res=TestDependabilityIndex(th,par)
 
 
 n = size(par,1);
-st = expected.TestTrueScoreVariance(par);
+st = irT.expected.TestTrueScoreVariance(par);
 p_i = [];
 for P = par'
-    p_i = [p_i expected.ItemScore(P')];
+    p_i = [p_i irT.expected.ItemScore(P')];
 end;
 p = mean(p_i);
-se = expected.TestErrorVariance(par);
+se = irT.expected.TestErrorVariance(par);
 sp = var(p_i);
 
 res = [];

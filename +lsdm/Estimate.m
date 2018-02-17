@@ -5,12 +5,12 @@ function res = Estimate(item_performance,Q,o)
 %
 %   Inout:
 %   item_performance - n by m matrix of probabilities p(j,k)
-%                       for correct answer  on item j from 
-%                       person with ability group k.%       
-%   Q                - matrix of indicators that item j 
+%                       for correct answer  on item j from
+%                       person with ability group k.%
+%   Q                - matrix of indicators that item j
 %                       requires attribute k  ( Q(j,k) = 1 ).
-%   o                - lsdm.Options set LSDMModel 
-%               Type of model: 
+%   o                - lsdm.Options set LSDMModel
+%               Type of model:
 %               1 - {X=1} = \cap A_i
 %               2 - {X=1} = \cup A_i
 %               3 - {X=1} = \cup \bar A_i
@@ -21,7 +21,7 @@ function res = Estimate(item_performance,Q,o)
 
 
 if nargin == 2
-    o = lsdm.Options;
+    o = irT.lsdm.Options;
 end;
 
 type = o.LSDMModel;
@@ -41,13 +41,13 @@ elseif type == 4
 else
     error('Unsupported model');
 end;
-    
+
 Res = [];
 for k = item_performance
      kt = ones( size(k) ) - k;
      eps = 0.0001;
      kt(  kt < eps  )  = ones( size( find( kt < eps), 1 ),1) .* eps;
-     T =  - lsqnonneg (Q, - ( ( log(k) .* ( 1 - b ) ) + ( log( kt ) .* b ) ));     
+     T =  - lsqnonneg (Q, - ( ( log(k) .* ( 1 - b ) ) + ( log( kt ) .* b ) ));
      Res = [Res T];
 end;
 

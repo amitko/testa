@@ -20,10 +20,10 @@ function [pars,SE]=ItemParametersEstimate_EM_3PL_t( data,o)
 
 
 if nargin < 2
-    o = irt.Options;
+    o = irT.irt.Options;
 end;
 
-if o.Model < 3 
+if o.Model < 3
     error('This function is prepared for 3PL model only')
 end;
 
@@ -47,7 +47,7 @@ end;
 
     %w(A_q)
     quadratureWeights = pdf('norm',quadratureNodes,o.MeanOfLatentTrait,o.VarOfLatentTrait);
-    
+
     % Initial item parameters
     xi_t = [];
     b = ones(1,J) * params_0(1);
@@ -61,7 +61,7 @@ end;
 
      iter = 1;
      fVal_old = -1;
-     
+
 while iter < o.NofIterations_EM
     %abs(fT_new - fT_old) > o.MaxFunTol && iter < o.NofIterations_EM
 
@@ -90,7 +90,7 @@ while iter < o.NofIterations_EM
     % Equation 16
     EL = zeros(m,N); %Examinee likelihood
     disp('--- --- Calculating examinee likelihood ...')
-    
+
     itemProb = log_prob_3pl(quadratureNodes,xi_t,o);
     tic
     for l = 1:N
@@ -100,7 +100,7 @@ while iter < o.NofIterations_EM
         P(:,l) = ( EL(:,l) .* quadratureWeights' ) ./  denom;
     end;
     toc
-    
+
 
     disp('--- --- Calculating expected values ...')
     tic
@@ -139,7 +139,7 @@ while iter < o.NofIterations_EM
     w = (Ps .* (1 - Ps)) ./ (Pj .* (1 - Pj));
     w( isnan(w) | isinf(w) ) = 0.5;
     toc
- 
+
     xi_new = zeros(J,3);
     fVal = zeros(J,3);
     parfor j = 1:J % for each item
@@ -189,8 +189,8 @@ oP = ones(size(PP,2),1);
 for j = 1:J % for each item
     disp(['SE for item ' num2str(j)]);
     tic
-    d2L = zeros(3,3);    
-    
+    d2L = zeros(3,3);
+
      for k = 1:N % For each examinee
         T =  P(:,k) .* (data(k,j) * oP - PP(j,:)');
         S1 = sum(T .* w(j,:)' .* (quadratureNodes' - xi_t(j,1)));
@@ -202,7 +202,7 @@ for j = 1:J % for each item
         li_dc = S3;
 
         % Equation 42
-        d2L = d2L + [li_db * li_db li_db * li_dalpha li_db * li_dc;... 
+        d2L = d2L + [li_db * li_db li_db * li_dalpha li_db * li_dc;...
                  li_dalpha * li_db li_dalpha * li_dalpha li_dalpha * li_dc; ...
                  li_dc * li_db li_dc * li_dalpha li_dc * li_dc];
      end;
@@ -214,7 +214,7 @@ for j = 1:J % for each item
     % Equation 37
       itemInf = d2L - d2g;
 
-    
+
     se = sqrt(diag(inv(itemInf))');
     if all(se > xi_t(j,:) * 0.1)
         SE(j,:) = [0 0 0];
@@ -243,8 +243,8 @@ end;
  pp = aa .* P;
  pq = ( 1 - aa ) .* (1 - P);
  res = prod((pp.^aa) .* (pq).^ (1-aa));
- 
- 
+
+
  % Equation 1
 function res=log_prob_3pl(th,params_e,o)
     aO = ones(1,size(params_e(:,1),1))';
@@ -254,19 +254,19 @@ function res=log_prob_3pl(th,params_e,o)
 
 
      %   res = Psi(params_e(:,3)) + (1 - Psi(params_e(:,3))) .* Psi(o.D .* exp(params_e(:,2)) .* ( th - params_e(:,1)) );
- 
+
  function res=log_prob_2pl(th,params_e,o)
     aO = ones(1,size(params_e(:,1),1))';
     thO = ones(1,size(th,2));
     res = Psi(o.D .* exp(params_e(:,2) * thO) .* ( aO * th - params_e(:,1) * thO) );
- 
+
 % Ecuation 35
 function res = calculateNextParameters(xii,xii1,xii2)
-    
+
     xi = [xii(:,1) exp(xii(:,2)) Psi(xii(:,3))];
     xi1 = [xii1(:,1) exp(xii1(:,2)) Psi(xii1(:,3))];
     xi2 = [xii2(:,1) exp(xii2(:,2)) Psi(xii2(:,3))];
-    
+
     dxi = xi1 - xi;
     dxi1 = xi2-xi1;
     dxi2 = dxi1 - dxi;
@@ -274,9 +274,9 @@ function res = calculateNextParameters(xii,xii1,xii2)
     c = mnorm(dxi)/mnorm(dxi2);
 
     res = c*xi1 + (1-c)*xi2;
-    
+
     res = [res(:,1) log(res(:,2)) log(res(:,3) ./ (1 - res(:,3)))];
-    
+
 % Equation 30
 function res = linEqnForParamForItem(xi,quadratureNodes,n,r,w,o)
     %log_prob = o.LogisticsModelFunctionReference;
@@ -301,12 +301,12 @@ function res = linEqnForParamForItem(xi,quadratureNodes,n,r,w,o)
     res(3) = (1/(1 - Psi(xi(3)))) * S3...
             + ((o.priorDistributionParameters.c(1) - 1)/Psi(xi(3))) - ((o.priorDistributionParameters.c(1) - 1)/(1 - Psi(xi(3))));
 
-        
+
 % Norm for Equation 34
 function res = mnorm(X)
     res = sqrt(sum(sum(X.^2)'));
 
-% Logistic function        
+% Logistic function
  function res = Psi(x)
     res = 1./(1 + exp(-x));
 

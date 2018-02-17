@@ -5,7 +5,7 @@ function res=TestNRScore(par)
 %	the test items.
 %
 %   INPUT:
-%       par - parameters of the items with rows 
+%       par - parameters of the items with rows
 %           [difficulty dicriminative gest]
 
 % Dimitar Atanasov 2014
@@ -13,5 +13,5 @@ function res=TestNRScore(par)
 
 res = 0;
 for p = par'
-   res = res + expected.ItemScore(p');
+   res = res + irT.expected.ItemScore(p');
 end;

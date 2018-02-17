@@ -4,11 +4,11 @@ function res = scaleScoreEquating (Data, options)
 % datanasov@ir-statistics.net
 
 if nargin < 2
-    option = equating.Options();
+    option = irT.equating.Options();
 end;
 
 if strcmp(options.EquatingType,'NCE')
-    res = scaleNCEfromTotal(Data(:,3), options.EquatingAdd(1), options.EquatingAdd(2));
+    res = irT.cls.scaleNCEfromTotal(Data(:,3), options.EquatingAdd(1), options.EquatingAdd(2));
 
 elseif strcmp(options.type,'SubDomain')
     % options.add = [numberOfItemsInTheTest]
