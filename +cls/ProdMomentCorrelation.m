@@ -1,6 +1,6 @@
 function res=ProdMomentCorrelation(item_response)
 % Function
-% res=cls.ProdMomentCorrelation(item_response))
+% res = irT.cls.ProdMomentCorrelation(item_response))
 % calculates the product moment correlation
 % for a given set of items
 %
@@ -11,7 +11,7 @@ function res=ProdMomentCorrelation(item_response)
 % Output:
 %   res - Matrix MxM of coefficients
 
-% Dimitar Atanasov, 2014
+% Dimitar Atanasov, i-Research, 2018
 % datanasov@ir-statistics.net
 
 p = irT.cls.ItemDifficulty( item_response );

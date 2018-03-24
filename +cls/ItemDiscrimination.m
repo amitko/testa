@@ -1,6 +1,5 @@
 function res=ItemDiscrimination(item_response)
-% Function
-% res=cls.ItemDiscrimination(item_response)
+% Function res = irT.cls.ItemDiscrimination(item_response)
 % calculates the discrimination index for a given set of items
 %
 % Input:
@@ -10,7 +9,7 @@ function res=ItemDiscrimination(item_response)
 % Output:
 %   res - vector with size M with discrimination indexes of the items
 
-% Dimitar Atanasov, 2014
+% Dimitar Atanasov, i-Research, 2018
 % datanasov@ir-statistics.net
 
 if ~isempty( find(item_response ~= 0 & item_response ~= 1, 1) )

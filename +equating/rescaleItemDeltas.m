@@ -1,10 +1,10 @@
 function res = rescaleItemDeltas( ItemDeltas, ScalingBaseDeltas, ReferenceDeltas, type)
 
-% rescaleItemDeltas( ItemDeltas, ScalingBaseDeltas, ReferenceDeltas, type)
+% Function res = irT.equating.rescaleItemDeltas( ItemDeltas, ScalingBaseDeltas, ReferenceDeltas, type)
 %
 % Rescale ItemDeltas on the scale, defined by ScalingBaseDeltas.
 % ScalingBaseDeltas and ReferenceDeltas should contain item delta values
-% for the same set of items. 
+% for the same set of items.
 %
 % In particular, the ReferenceDeltas and ItemDeltas are delta values,
 % etimated for a given test. Some of the items (placed in ReferenceDeltas)
@@ -18,7 +18,7 @@ function res = rescaleItemDeltas( ItemDeltas, ScalingBaseDeltas, ReferenceDeltas
 %
 % The input data is in columns.
 
-% Dimitr Atanasov, 2017
+% Dimitr Atanasov, i-Research, 2018
 % datanasov@ir-statistics.net
 
 if nargin < 4

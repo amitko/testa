@@ -1,9 +1,9 @@
 function res = singleTest(nOfItems, itemParams, varargin)
-% function res = singleTest(nOfItems, itemParams)
+% function res = irT.assembly.singleTest(nOfItems, itemParams, varargin)
 %
-% Returnt the item idexex from the itemParams
+% Returnt the item indexex from the itemParams
 % which compose a test.
-% 
+%
 % nOfItems - number of items in teh test.
 % itemParams - list of IRT item parameters
 %   [difficulty distcrimination guessing]
@@ -12,17 +12,17 @@ function res = singleTest(nOfItems, itemParams, varargin)
 % Optional parameters: ['Name',value] pairs
 %   abilityScaleValues - values on the ability scale: default -3:0.5:3
 %
-%   targetInfFunctionValuesDN - Lower boundary for test information 
+%   targetInfFunctionValuesDN - Lower boundary for test information
 %               function. Should be a vector with values for any value of
 %               abilityScaleValues.
 %               The default value is zeros.
 %
-%   targetInfFunctionValuesUP - Upper boundary for for test information 
+%   targetInfFunctionValuesUP - Upper boundary for for test information
 %               function. Should be a vector with values for any value of
 %               abilityScaleValues. If missing, an upper restriction of the
 %               test information function is not considered.
 
-% Dimitar Atanasov. 2016
+% Dimitar Atanasov, i-Research, 2018
 % datanasov@ir-statistics.net
 
 % =====  parse the inputs ====

@@ -1,5 +1,5 @@
 function [A,B,S,SA] = scaleTestSequence(testSequence, commonItems)
-% [A,B,S,SA] = scaleTestSequence(testSequence, commonItems)
+% Function [A,B,S,SA] = irT.equating.scaleTestSequence(testSequence, commonItems)
 % this function calls scaleItemParameters
 %
 % The first element in test sequence should be
@@ -9,7 +9,7 @@ function [A,B,S,SA] = scaleTestSequence(testSequence, commonItems)
 % testSequence is a cellarray of target tests
 % commonItems is a cell array of common item sets
 
-% Dimitar Atanasov, 2015
+% Dimitar Atanasov, i-Research, 2018
 % datanasov@ir-statistics.net
 
 if length(testSequence) ~= length(commonItems) + 1

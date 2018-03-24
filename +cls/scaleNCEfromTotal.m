@@ -1,4 +1,6 @@
 function res = scaleNCEfromTotal(score, MeanScore, stdScore)
+% Function res = irT.cls.scaleNCEfromTotal(score, MeanScore, stdScore)
+% scales score in the range 0-100
 
 % Dimitar Atanasov, 2015
 % datanasov@ir-statistics.net

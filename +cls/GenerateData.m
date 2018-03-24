@@ -1,10 +1,10 @@
 function res=GenerateData(N,p);
-% Function res=cls.GenerateData(N,p)
+% Function res=irT.cls.GenerateData(N,p)
 %
-% Simulate dichotomous item response from 
-% N persons with probability for correct 
+% Simulate dichotomous item response from
+% N persons with probability for correct
 % performance p.
-% 
+%
 %
 % Input:
 %       N - number of persons
@@ -16,7 +16,7 @@ function res=GenerateData(N,p);
 %            columns represent items.
 %
 
-% Dimitar Atanasov, 2014
+% Dimitar Atanasov, i-Research, 2018
 % datanasov@ir-statistics.net
 
 %% -- Generate response as a binomial trials ---

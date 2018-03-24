@@ -1,6 +1,5 @@
 function res=Phi(item_response)
-% Function
-% res=cls.Phi(item_response)
+% Function res=irT.cls.Phi(item_response)
 % calculates the phi coefficient for a given set of items
 %
 % Input:
@@ -10,7 +9,7 @@ function res=Phi(item_response)
 % Output:
 %   res - Matrix MxM phi coefficients
 
-% Dimitar Atanasov, 2014
+% Dimitar Atanasov, i-Research, 2018
 % datanasov@ir-statistics.net
 
 

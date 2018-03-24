@@ -1,5 +1,8 @@
 function res = scalEdScore(dScore,dScoreMax, type)
 
+% Dimitar Atanasov, i-Research, 2018
+% datanasov@ir-statistics.net
+
 if nargin < 3
     type = 'simple';
 end;

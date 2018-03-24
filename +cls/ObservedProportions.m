@@ -1,5 +1,5 @@
 function res = ObservedProportions(item_result, group)
-% Function cls.ObservedProportions(item_result, group)
+% Function irT.cls.ObservedProportions(item_result, group)
 % Returns the observed proportions for each ability group on a given item
 %
 %   INPUT:
@@ -9,7 +9,7 @@ function res = ObservedProportions(item_result, group)
 %   OUTPUT:
 %       res(k) = proportion of correct answers of the item for a group k
 
-% Dimitar Atanasov 2014
+% Dimitar Atanasov, i-Research, 2018
 % datanasov@ir-statistics.net
 
 if size(item_result) ~= size(group)
@@ -19,7 +19,7 @@ end;
 if size(item_result,2) ~= 1 | size(group) ~= 1
     error('Input arguments must be columns');
 end;
-   
+
 if ~isempty ( item_result( find (item_result ~= 0 & item_result ~= 1 )))
     error('Wrong item results. Should be 0 or 1');
 end;

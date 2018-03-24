@@ -1,6 +1,10 @@
 function res = HIndex(person_response, other_response)
 
-% Dimitar Atanasov, 2014
+% Function res = irT.cls.HIndex(person_response, other_response)
+% calculates the H index
+
+
+% Dimitar Atanasov, i-Research, 2018
 % datanasov@ir-statistics.net
 
 [n_persons, n_items] = size(other_response);

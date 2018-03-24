@@ -1,4 +1,8 @@
-function res = itemTrueScore(itemThresholds, ability, scale_values, o)
+function res = itemTrueScore(itemThresholds, ability, scale_values, o, return_type)
+
+if nargin < 5 || isempty(return_type)
+    return_type = 'default';
+end;
 
 if nargin < 4 || isempty(o)
     o = irT.grm.Options();
@@ -12,6 +16,12 @@ end
 
 res = [];
 
-for k = 1:size(ability,2)
-    res(k,:) = (scale_values * irT.grm.logisticProbability(itemThresholds, ability(k), o )') / size(scale_values,2);
+for k = 1:size(ability,1)
+    if strcmp(return_type,'default')
+        itemPerformance = irT.grm.logisticProbability(itemThresholds, ability(k), o );
+    else 
+        itemPerformance = irT.grm.logisticProbability(itemThresholds, ability(k), o )';
+    end;
+    
+    res(k,:) = (scale_values * itemPerformance') ./ sum(scale_values) * max(scale_values);
 end

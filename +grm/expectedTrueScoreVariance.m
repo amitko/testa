@@ -1,6 +1,6 @@
-function res = expectedTrueScoreVariance(itemThresholds, ability, o)
+function res = expectedTrueScoreVariance(itemThresholds, ability,scale_values, o)
 
-if nargin < 3 || isempty(o)
+if nargin < 4 || isempty(o)
     o = irT.grm.Options();
 end;
 
@@ -10,10 +10,11 @@ itemDiscrimination = o.itemDiscrimination;
 
 res = 0;
 
-for p = 1:size(itemThresholds,1)
-    for q = 1:size(itemThresholds,1)
-        res = res + sqrt(irT.grm.itemExpectedTrueVariance(itemThresholds(p,:), ability,[], o) .* ...
-                         irT.grm.itemExpectedTrueVariance(itemThresholds(q,:), ability, [] ,o) ...
-                        );
+for p = 1:size(scale_values,2)
+    for q = 1:size(scale_values,2)
+        a = irT.grm.itemExpectedTrueVariance(itemThresholds(:,p), ability,scale_values(:,p)', o);
+        b = irT.grm.itemExpectedTrueVariance(itemThresholds(:,q), ability, scale_values(:,q)' ,o);
+        rr = a .* b;
+        res = res + sqrt( rr );
     end;
 end;

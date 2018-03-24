@@ -1,6 +1,5 @@
 function res=CrAlpha(item_response)
-% Function
-% res=cls.CrAlpha(item_response)
+% Function res = irT.cls.CrAlpha(item_response)
 % calculates the Cronbach's alpha coefficient
 % for a given set of items
 %
@@ -11,7 +10,7 @@ function res=CrAlpha(item_response)
 % Output:
 %   res - Cronbach's alpha coefficient
 
-% Dimitar Atanasov, 2014
+% Dimitar Atanasov, i-Research, 2018
 % datanasov@ir-statistics.net
 
 s = irT.cls.ItemVariance( item_response );

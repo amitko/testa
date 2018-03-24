@@ -1,17 +1,16 @@
 function res=StdCrAlpha(item_response)
-% Function
-% res=cls.StdCrAlpha(item_response)
-% calculates the standartized Cronbach's alpha 
+% Function res = irT.cls.StdCrAlpha(item_response)
+% calculates the standartized Cronbach's alpha
 % coefficient for a given set of items
 %
 % Input:
 %   item_response - NxM matrix of  answers from N
 %                   subjects aver a set of M items
 %
-% Output: 
+% Output:
 %   res - Standartized Cronbach's alpha coefficient
 
-% Dimitar Atanasov, 2014
+% Dimitar Atanasov, i-Researc, 2018
 % datanasov@ir-statistics.net
 
 

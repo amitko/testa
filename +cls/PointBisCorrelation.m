@@ -1,6 +1,5 @@
 function res=PointBisCorrelation(item_response)
-% Function
-% res=cls.PointBisCorrelation(item_response)
+% Function res=irT.cls.PointBisCorrelation(item_response)
 % calculates the point biserial correlation
 % for a given set of items
 %
@@ -12,7 +11,7 @@ function res=PointBisCorrelation(item_response)
 %   res - vector with size M with point biserial correlation
 %         for the items set
 
-% Dimitar Atanasov, 2014
+% Dimitar Atanasov, i-Research, 2018
 % datanasov@ir-statistics.net
 
 if ~isempty( find(item_response ~= 0 && item_response ~= 1, 1) )

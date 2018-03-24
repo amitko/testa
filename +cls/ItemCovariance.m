@@ -1,6 +1,5 @@
 function res=ItemCovariance(item_response)
-% Function
-% res=cls.ItemCovariance(item_response)
+% Function res = irT.cls.ItemCovariance(item_response)
 % calculates the covariance between the items
 %
 % Input:
@@ -10,7 +9,7 @@ function res=ItemCovariance(item_response)
 % Output:
 %   res - Matrix MxM of covariances
 
-% Dimitar Atanasov, 2014
+% Dimitar Atanasov, i-Research, 2018
 % datanasov@ir-statistics.net
 
 p = irT.cls.ItemDifficulty( item_response );

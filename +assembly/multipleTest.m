@@ -1,5 +1,39 @@
 function res = multipleTest(nOfTest, nOfItems, itemParams, varargin)
 
+% Function irT.assembly.multipleTest(nOfTest, nOfItems, itemParams, varargin)
+% Prepares a nOfTest tests with nOfItems items, taken from item bank,
+% presented by itemParams.
+%
+% Returnt the item indexex from the itemParams
+% which compose a test.
+%
+% itemParams - list of IRT item parameters
+%   [difficulty distcrimination guessing]
+%   in rows
+%
+% Additional parameters:
+%   abilityScaleValues - values on the ability scale: default -3:0.5:3
+%
+%   targetInfFunctionValuesDN - Lower boundary for test information
+%               function. Should be a vector with values for any value of
+%               abilityScaleValues.
+%               The default value is zeros.
+%
+%   targetInfFunctionValuesUP - Upper boundary for for test information
+%               function. Should be a vector with values for any value of
+%               abilityScaleValues. If missing, an upper restriction of the
+%               test information function is not considered.
+%   excludedItems  - items which should not be included
+%   requiredItems  - items which should be included
+%   addEqualitiesLHS
+%   addEqualitiesRHS
+%   addInequalitiesLHS
+%   addInequalitiesRHS
+
+% Dimitar Atanasov, i-Research, 2018
+% datanasov@ir-statistics.net
+
+
 % Required items can be alligned with 0
 
 % =====  parse the inputs ====
@@ -72,35 +106,35 @@ if ~isempty(inP.Results.targetFunction)
 else
     f = ones(1,numItems * 2);
 end;
-    
+
 
 for k = 1:nOfTest
-    
+
     % === Equality constraints ====
 
     % number of items in the test
     Ae = [ones(1,numItems), zeros(1,numItems); zeros(1,numItems) , ones(1,numItems) ];
     be = [nOfItems; nOfItems * (nOfTest - k) ];
-   
-    
+
+
     % === Inequality constraints ====
     A = [];
     b = [];
-    
+
     % No item overlap
     A = [eye(numItems) eye(numItems)];
     b = ones(numItems,1);
-    
-    
-    
+
+
+
     % greater than the target TIF
-    
+
     if k == nOfTest
         shadowTestScale = 1;
     else
         shadowTestScale = (nOfTest - k);
     end;
-    
+
     if ~isempty(inP.Results.targetInfFunctionValuesDN)
         A = [
             A; ...
@@ -127,7 +161,7 @@ for k = 1:nOfTest
 %            inP.Results.targetInfFunctionValuesUP' * shadowTestScale; ... % ????
             ];
     end;
-    
+
     % excluded items forced to be 0 : Ax = 0
     if ~isempty(excludedItems)
         zr = zeros(1,numItems * 2);
@@ -135,7 +169,7 @@ for k = 1:nOfTest
         Ae = [Ae; zr];
         be = [be; 0];
     end;
-    
+
     % required items forced to be 1 : Ax = size(requiredItems)
     if ~isempty(inP.Results.requiredItems)
         reqItems = inP.Results.requiredItems(k,inP.Results.requiredItems(k,:) > 0);
@@ -145,7 +179,7 @@ for k = 1:nOfTest
         be = [be; size(reqItems,2)];
     end;
 
-    
+
     % additional equalities
     if ~isempty(inP.Results.addEqualitiesLHS)
         Ae = [Ae; [inP.Results.addEqualitiesLHS zeros(size(inP.Results.addEqualitiesLHS))]];
@@ -158,7 +192,7 @@ for k = 1:nOfTest
         b = [b; inP.Results.addInequalitiesRHS * 2];
     end;
 
-    
+
 
     % ===== Optimizing =======
     %x = intlinprog(f,IntCon,A,b,Ae,be,lb,ub);
@@ -171,11 +205,11 @@ for k = 1:nOfTest
                                     'addInequalitiesRHS',b,...
                                     'targetFunction',f...
                                     );
-             
+
     res = [res inCurrentTest(1:nOfItems)];
-    
+
     excludedItems = [excludedItems; inCurrentTest(1:nOfItems)];
-    
+
 end;
 
 

@@ -1,8 +1,9 @@
 function res = StratifiedAlpha(item_response1, item_response2)
-% function cls.StratifiedAlpha(item_response1, item_response2)
+
+% Function irT.cls.StratifiedAlpha(item_response1, item_response2)
 % calculates the stratified alpha coefficient
 
-% Dimitar Atanasov, 2014
+% Dimitar Atanasov, i-Research, 2018
 % danatasov@ir-statistics.net
 
 v1 = var(sum(item_response1'));

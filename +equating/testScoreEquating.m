@@ -1,5 +1,11 @@
 function res = testScoreEquating(itemParameters1,itemParameters2,th)
-% itemParameters are for Test score 1
+% Function res = irT.equationg.testScoreEquating(itemParameters1,itemParameters2,th)
+% transforms test score, obtained on Test1 (with itemParameters1) on the
+% scale of Test2 (with itemParameters2).
+% th - is a ability scale values.
+
+% Dimitar Atanasov, i-Research, 2018
+% datanasov@ir-statistics.net
 
 res = [];
 T1 = irT.expected.TestTrueScore(itemParameters1,th);

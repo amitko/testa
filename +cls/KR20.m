@@ -1,6 +1,6 @@
 function res= KR20(item_data,score)
-% res= cls.KR20(item_data,score)
-% 
+% Function res= irT.cls.KR20(item_data,score)
+%
 %   Returns Kuder-Richardson coefficient of the
 %   reliability of the test for the dichotomous
 %   test results.
@@ -10,13 +10,13 @@ function res= KR20(item_data,score)
 %           test results of n examinee ove m items.
 %           1 for correct answer and 0 otherwise
 %       score - n by 1 vector of examinees scores
-%           if omitted it is calculated as sum of 
+%           if omitted it is calculated as sum of
 %           correct answers.
 %
 %   Output:
 %       res = Kuder-Richardson coefficient
 
-% Dimitar Atanasov, 2014
+% Dimitar Atanasov, i-Research, 2018
 % datanasov@ir-statistics.net
 
 

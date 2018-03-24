@@ -20,7 +20,7 @@ ability = o.LatentTraitValues;
 
 res = zeros(1,size(ability,2));
 for k = 1:size(itemThresholds,1)
-    res = res + irT.grm.itemTrueScore(itemThresholds(k,:), ability, scale_values(k,:), o)';
+    res = res + irT.grm.itemTrueScore(itemThresholds(k,itemThresholds(k,:) > 0), ability, scale_values(k,itemThresholds(k,:) > 0), o)';
 end;
 
 
