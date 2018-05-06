@@ -27,8 +27,10 @@ d = o.D;
 
 res = [];
 
-for threshlold = itemDifficultyLevels
-    val = exp(d * o.itemDiscrimination *(th - threshlold) )./( 1 + exp(d * o.itemDiscrimination *(th - threshlold) ));
+for k = 1:size(itemDifficultyLevels,2)
+    threshlold = itemDifficultyLevels(k);
+    %val = exp(d * o.itemDiscrimination *(th - threshlold) )./( 1 + exp(d * o.itemDiscrimination *(th - threshlold) ));
+    val = o.guessing(k) + ((1 - o.guessing(k) ) ./ ( 1 + exp(d * o.itemDiscrimination *(threshlold - th) ))) ;
     res = [res val];
 end;
 
