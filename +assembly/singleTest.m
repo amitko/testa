@@ -77,7 +77,7 @@ ub = ones(numItems,1);
 
 IntCon = 1:numItems;
 
-itemInf = expected.ItemInformation(itemParams,inP.Results.abilityScaleValues);
+itemInf = irT.expected.ItemInformation(itemParams,inP.Results.abilityScaleValues);
 itemInf(isfinite(itemInf) == 0) = 0;
 
 % === Equality constraints ====
