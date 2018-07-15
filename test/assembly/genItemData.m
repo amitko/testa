@@ -1,3 +1,4 @@
+
  N = 10000;
 
  % difficulti,  discriminations, guessing
